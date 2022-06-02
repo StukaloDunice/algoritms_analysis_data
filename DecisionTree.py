@@ -16,7 +16,7 @@ class node:
     def __init__(self,data_index,
                  left=None,right=None,
                  feature=None,split=None,
-                 out = None
+                 out = None,Gini=None
                  ):
         self.data_index = data_index# коллекция Индекс строки коллекции, попадающей на узел
         self.left = left# int индекс левого поддерева
@@ -24,8 +24,9 @@ class node:
         self.feature = feature# string функция разделения
         self.split = split# int or float разделитель
         self.out = out# Выходное значение конечного узла
+        self.Gini = Gini
     def get(self):
-        return([self.data_index, self.left, self.right, self.feature, self.split, self.out])
+        return([self.data_index, self.left, self.right, self.feature, self.split, self.out, self.Gini])
 
 def build_tree(S, min_sample_leaf):
     # S - Набор данных, используемый для построения дерева решений
@@ -68,10 +69,11 @@ def divide(S, leaf, min_sample_leaf):
     if not res:
         leaf.out = data.iloc[:,data.shape[1]-1].mode()[0] # Режим как результат предсказания, тоесть значение, которое появляется чаще всего. Это может быть несколько значений.
         return None
-    feature, split = res
+    Gini, feature, split = res
     # Возвращаемое значение функции gini_min представляет собой два кортежа (лучшая функция сегментации, значение сегментации)
     leaf.feature = feature
     leaf.split = split
+    leaf.Gini = Gini
     left = node(data[data[feature] <= split].index)
     right = node(data[data[feature] > split].index)
     return left, right
@@ -128,7 +130,8 @@ def gini_min(data, min_sample_leaf):
     # res также может быть пустым
     if res:
         _,feature,split = min(res,key=lambda x:x[0])
-        return (data.columns[feature],split)
+        print(_)
+        return (_,data.columns[feature],split)
     else:
         return None
     
@@ -204,6 +207,8 @@ if __name__ == "__main__":
     t2 = time.time()
     score = hit_rate(tree, test)
     t3 = time.time()
+    for i in tree:
+        print(i.get())
     print('Время построения дерева решений равно：%f'%(t2-t1))
     print('Время классификации тестовой выборки равно：%f'%(t3-t2))
     print('Точность классификации：%f'%score)
