@@ -19,7 +19,7 @@ class node:
     def __init__(self, data,
                  left=None, right=None,
                  feature=None, split=None,
-                 out=None, Entropy=1
+                 out=None, Entropy=None
                  ):
         self.data = data  # коллекция Индекс строки коллекции, попадающей на узел
         self.left = left  # int индекс левого поддерева
@@ -29,23 +29,6 @@ class node:
         self.out = out  # Выходное значение конечного узла
         self.Entropy = Entropy
 
-    def get_left(self):
-        return self.left
-
-    def get_right(self):
-        return self.right
-
-    def get(self):
-        print('data_index: ', self.data.size)
-        print('Entropy: ', self.Entropy)
-        print('left_node: ', self.left)
-        print('right_node: ', self.right)
-        print('feature: ', self.feature)
-        print('split: ', self.split)
-        print('out: ', self.out)
-        print()
-        return ([self.data, self.left, self.right, self.feature, self.split, self.out, self.Entropy])
-
 
 def build_tree(S, min_sample_leaf):
     # S - Набор данных, используемый для построения дерева решений
@@ -53,6 +36,12 @@ def build_tree(S, min_sample_leaf):
     # Храните древовидные структуры, используя дочернюю нотацию
     # root - данные, поступающие в начальный узел
     root = node(S)
+    bool_indexby0 = S.iloc[:, S.shape[1] - 1] == 0
+    bool_indexby1 = S.iloc[:, S.shape[1] - 1] == 1
+    s1 = S.loc[bool_indexby0, S.columns[S.shape[1] - 1]]
+    S1 = s1.shape[0]
+    S2 = S.shape[0] - S1
+    root.Entropy = -(S1/S.shape[0] * np.log2(S1/S.shape[0]) + S2/S.shape[0] * np.log2(S2/S.shape[0]))
     tree = []
     tree.append(root)
     # i - указывает на текущий обрабатываемый конечный узел
@@ -84,19 +73,17 @@ def build_tree(S, min_sample_leaf):
 # разделение  S - датасет
 def divide(leaf, min_sample_leaf):
     # Разделяем листовые узлы, чтобы определить, можно ли их разделить
-    print(type(leaf.data))
     data = leaf.data.loc[:]  # получаем набор данных узла
     res = entropy_min(leaf, min_sample_leaf)
     if not res:
         leaf.out = data.iloc[:, data.shape[1] - 1].mode()[0]  # Режим как результат предсказания, тоесть значение, которое появляется чаще всего. Это может быть несколько значений.
         return None
-    Entropy, feature, split = res
+    entropy_left, entropy_right, feature, split = res
     # Возвращаемое значение функции gini_min представляет собой два кортежа (лучшая функция сегментации, значение сегментации)
     leaf.feature = feature
     leaf.split = split
-    leaf.Entropy = Entropy
-    left = node(data[data[feature] <= split])
-    right = node(data[data[feature] > split])
+    left = node(data=data[data[feature] <= split],Entropy=entropy_left)
+    right = node(data=data[data[feature] > split], Entropy=entropy_right)
     return left, right
 
 
@@ -106,6 +93,9 @@ def entropy_min(leaf, min_sample_leaf):
     S = data.shape[0]  # S - количество строк в датасете (объектов)
     for feature in np.arange(0, data.shape[1] - 1):
         if boolAttrOrNot(data, feature):
+            IG_left = []
+            IG_right = []
+            IG = []
             bool_indexby0 = data.iloc[:, feature] == 0
             bool_indexby1 = data.iloc[:, feature] == 1
             s1 = data.loc[bool_indexby0, data.columns[data.shape[1] - 1]]
@@ -114,8 +104,14 @@ def entropy_min(leaf, min_sample_leaf):
             if S1 < min_sample_leaf or S2 < min_sample_leaf:
                 continue
             s2 = data.loc[bool_indexby1, data.columns[data.shape[1] - 1]]
-            res.append((leaf.Entropy - ((S1/S) * entropy(s1) + (S2/S) * entropy(s2)), feature, 0))
+            entr_left = entropy(s1)
+            entr_right = entropy(s2)
+            IG_left.append(entr_left)
+            IG_right.append(entr_right)
+            res.append((entr_left, entr_right ,leaf.Entropy - ((S1 / S) * entr_left + (S2 / S) * entr_right), feature, 0))
         else:
+            IG_left = []
+            IG_right = []
             IG = []
             s = data.iloc[:, [data.shape[1] - 1, feature]]
             s = s.sort_values(s.columns[1])
@@ -130,19 +126,25 @@ def entropy_min(leaf, min_sample_leaf):
                     # s1 и s2 - наборы данных до разделителя и после разделителя соответственно
                     s1 = data.iloc[:(i + 1), data.shape[1] - 1]
                     s2 = data.iloc[(i + 1):, data.shape[1] - 1]
-                    IG.append((leaf.Entropy - ((S1/S) * entropy(s1) + (S2/S) * entropy(s2)),s.iloc[i,1]))
+                    # IG.append(((S1/S) * entropy(s1), (S2/S) * entropy(s2),s.iloc[i,1]))
+                    entr_left = entropy(s1)
+                    entr_right = entropy(s2)
+                    IG_left.append(entr_left)
+                    IG_right.append(entr_right)
+                    IG.append((leaf.Entropy - ((S1/S)*entr_left + (S2/S) * entr_right), s.iloc[i,1]))
             print(feature)
             print(IG)
             if IG:
                 # выбираем наименьший индекс джини
                 entr, split = max(IG, key=lambda x: x[0])
+                index = IG.index((entr, split))
                 # сохраняем индекс, столбец, значение разделителя
-                res.append((entr, feature, split))
+                res.append((IG_left[index], IG_right[index], entr ,feature, split))
                 print('res = ', res)
                 print()
     if res:
-        _, feature, split = max(res, key=lambda x: x[0])
-        return (_, data.columns[feature], split)
+        left, right, _, feature, split = max(res, key=lambda x: x[2])
+        return (left, right, feature, split)
     else:
         return None
 
@@ -202,20 +204,10 @@ def gini_min(data, min_sample_leaf):
     else:
         return None
 
-
-def gini(s):
+def entropy(s):
     # возвращает вероятность каждого удикального значения в столбце, тоесть
     # если в столбце 144 значения, из них 51 единица и 91 нуль, то вернет
     # 51/144 и 91/144 => 0.35416667 , 0.64583333
-    p = np.array(s.value_counts(True))
-    # np.square([0.64583,0.35416667]) - возводит в квадрат каждый элемент
-    # вернет [0.41709639, 0.12543403]
-    # np.sum - суммирует эти два элемента
-    # 1-sum(pi^2)
-    return 1 - np.sum(np.square(p))
-
-
-def entropy(s):
     p = np.array(s.value_counts(True))
     entr = -(p[0] * np.log2(p[0]) + p[1] * np.log2(p[1]))
     return entr
@@ -287,8 +279,8 @@ if __name__ == "__main__":
         dot.node(str(i),
                  f'{tree[i].feature} <= {tree[i].split}\n entropy = {tree[i].Entropy}\n samples = {tree[i].data}\n value = {[tree[i].left, tree[i].right]}')
     for i in range(len(tree)):
-        left = tree[i].get_left()
-        right = tree[i].get_right()
+        left = tree[i].left
+        right = tree[i].right
         if left != None and right != None:
             for j in range(left, right + 1):
                 dot.edge(str(i), str(j))
