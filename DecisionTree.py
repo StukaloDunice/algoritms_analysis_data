@@ -250,7 +250,7 @@ if __name__ == "__main__":
     t3 = time.time()
     for i in range(len(tree)):
         dot.node(str(i),
-                 f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]}')
+                 f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
     for i in range(len(tree)):
         left = tree[i].get_left()
         right = tree[i].get_right()

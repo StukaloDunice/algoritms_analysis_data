@@ -1,320 +1,419 @@
 digraph {
 	0 [label="EverTravelledAbroad <= 0
- gini = 0.37443693137153455
+ entropy = 0.9445465690697308
  samples = 1590
- value = [1, 2]"]
+ value = [1, 2] 
+ out = None"]
 	1 [label="FrequentFlyer <= 0
- gini = 0.381238913229083
+ entropy = 0.8274964308745911
  samples = 1286
- value = [3, 4]"]
-	2 [label="Employment Type <= 0
- gini = 0.31346283931221086
+ value = [3, 4] 
+ out = None"]
+	2 [label="FrequentFlyer <= 0
+ entropy = 0.7361677594570214
  samples = 304
- value = [5, 6]"]
+ value = [5, 6] 
+ out = None"]
 	3 [label="Employment Type <= 0
- gini = 0.36477882102017156
+ entropy = 0.7980015686443268
  samples = 1096
- value = [7, 8]"]
+ value = [7, 8] 
+ out = None"]
 	4 [label="GraduateOrNot <= 0
- gini = 0.45043837305949547
+ entropy = 0.9494520153879484
  samples = 190
- value = [9, 10]"]
-	5 [label="None <= None
- gini = None
- samples = 36
- value = [None, None]"]
-	6 [label="FrequentFlyer <= 0
- gini = 0.2793228445689807
- samples = 268
- value = [11, 12]"]
+ value = [9, 10] 
+ out = None"]
+	5 [label="Age <= 30
+ entropy = 0.8596840707294896
+ samples = 166
+ value = [11, 12] 
+ out = None"]
+	6 [label="FamilyMembers <= 3
+ entropy = 0.5175827525559072
+ samples = 138
+ value = [13, 14] 
+ out = None"]
 	7 [label="GraduateOrNot <= 0
- gini = 0.3126661147662411
+ entropy = 0.7229551815366475
  samples = 389
- value = [13, 14]"]
+ value = [15, 16] 
+ out = None"]
 	8 [label="FamilyMembers <= 5
- gini = 0.38746319321472833
+ entropy = 0.8334581632623206
  samples = 707
- value = [15, 16]"]
+ value = [17, 18] 
+ out = None"]
 	9 [label="None <= None
- gini = None
+ entropy = 0.9957274520849255
  samples = 39
- value = [None, None]"]
-	10 [label="Age <= 29
- gini = 0.43365963694035453
+ value = [None, None] 
+ out = 1"]
+	10 [label="FamilyMembers <= 3
+ entropy = 0.9092115787771466
  samples = 151
- value = [17, 18]"]
-	11 [label="Age <= 29
- gini = 0.3570670064776467
- samples = 146
- value = [19, 20]"]
-	12 [label="AnnualIncome <= 1400000
- gini = 0.17504109467324175
- samples = 122
- value = [21, 22]"]
+ value = [19, 20] 
+ out = None"]
+	11 [label="ChronicDiseases <= 0
+ entropy = 0.9316958485118402
+ samples = 95
+ value = [21, 22] 
+ out = None"]
+	12 [label="AnnualIncome <= 1350000
+ entropy = 0.7162583911075449
+ samples = 71
+ value = [23, 24] 
+ out = None"]
 	13 [label="None <= None
- gini = None
+ entropy = 0.7335379291086666
+ samples = 34
+ value = [None, None] 
+ out = 1"]
+	14 [label="FamilyMembers <= 4
+ entropy = 0.42480887386781474
+ samples = 104
+ value = [25, 26] 
+ out = None"]
+	15 [label="None <= None
+ entropy = 0
  samples = 35
- value = [None, None]"]
-	14 [label="ChronicDiseases <= 0
- gini = 0.33880660956654474
+ value = [None, None] 
+ out = 0"]
+	16 [label="ChronicDiseases <= 0
+ entropy = 0.7607859931846075
  samples = 354
- value = [23, 24]"]
-	15 [label="FamilyMembers <= 4
- gini = 0.3300094769527283
+ value = [27, 28] 
+ out = None"]
+	17 [label="FamilyMembers <= 4
+ entropy = 0.8048243684904071
  samples = 496
- value = [25, 26]"]
-	16 [label="GraduateOrNot <= 0
- gini = 0.47144242013910265
+ value = [29, 30] 
+ out = None"]
+	18 [label="GraduateOrNot <= 0
+ entropy = 0.890917703193763
  samples = 211
- value = [27, 28]"]
-	17 [label="AnnualIncome <= 1150000
- gini = 0.41262556214012514
- samples = 103
- value = [29, 30]"]
-	18 [label="None <= None
- gini = None
- samples = 48
- value = [None, None]"]
-	19 [label="FamilyMembers <= 4
- gini = 0.3522754665753181
- samples = 86
- value = [31, 32]"]
-	20 [label="None <= None
- gini = None
- samples = 60
- value = [None, None]"]
-	21 [label="None <= None
- gini = None
- samples = 41
- value = [None, None]"]
-	22 [label="Age <= 30
- gini = 0.07100271002710037
- samples = 81
- value = [33, 34]"]
-	23 [label="AnnualIncome <= 850000
- gini = 0.3007180911038449
- samples = 245
- value = [35, 36]"]
-	24 [label="FamilyMembers <= 5
- gini = 0.41048239532483655
- samples = 109
- value = [37, 38]"]
-	25 [label="Age <= 30
- gini = 0.3355234074953252
- samples = 353
- value = [39, 40]"]
-	26 [label="AnnualIncome <= 1150000
- gini = 0.3142475441450077
- samples = 143
- value = [41, 42]"]
-	27 [label="None <= None
- gini = None
- samples = 35
- value = [None, None]"]
-	28 [label="ChronicDiseases <= 0
- gini = 0.4612299465240641
- samples = 176
- value = [43, 44]"]
-	29 [label="AnnualIncome <= 850000
- gini = 0.22279135338345862
- samples = 70
- value = [45, 46]"]
-	30 [label="None <= None
- gini = None
- samples = 33
- value = [None, None]"]
-	31 [label="None <= None
- gini = None
- samples = 47
- value = [None, None]"]
-	32 [label="None <= None
- gini = None
- samples = 39
- value = [None, None]"]
-	33 [label="None <= None
- gini = None
- samples = 41
- value = [None, None]"]
-	34 [label="None <= None
- gini = None
- samples = 40
- value = [None, None]"]
-	35 [label="AnnualIncome <= 650000
- gini = 0.26485707422531823
- samples = 181
- value = [47, 48]"]
-	36 [label="Age <= 32
- gini = 0.3896484375
- samples = 64
- value = [49, 50]"]
-	37 [label="Age <= 31
- gini = 0.4055299539170507
- samples = 63
- value = [51, 52]"]
-	38 [label="None <= None
- gini = None
- samples = 46
- value = [None, None]"]
-	39 [label="AnnualIncome <= 1050000
- gini = 0.35042127522945943
- samples = 253
- value = [53, 54]"]
-	40 [label="Age <= 33
- gini = 0.26913194444444444
- samples = 100
- value = [55, 56]"]
-	41 [label="AnnualIncome <= 900000
- gini = 0.32561491301230555
- samples = 109
- value = [57, 58]"]
-	42 [label="None <= None
- gini = None
+ value = [31, 32] 
+ out = None"]
+	19 [label="None <= None
+ entropy = 0.7871265862012691
  samples = 34
- value = [None, None]"]
-	43 [label="AnnualIncome <= 650000
- gini = 0.47627666451195866
- samples = 125
- value = [59, 60]"]
-	44 [label="None <= None
- gini = None
- samples = 51
- value = [None, None]"]
-	45 [label="None <= None
- gini = None
+ value = [None, None] 
+ out = 0"]
+	20 [label="AnnualIncome <= 1050000
+ entropy = 0.9344491365829437
+ samples = 117
+ value = [33, 34] 
+ out = None"]
+	21 [label="FamilyMembers <= 4
+ entropy = 0.7578784625383954
+ samples = 64
+ value = [35, 36] 
+ out = None"]
+	22 [label="None <= None
+ entropy = 0.9811522341999133
+ samples = 31
+ value = [None, None] 
+ out = 1"]
+	23 [label="None <= None
+ entropy = 0.9268190639645772
  samples = 38
- value = [None, None]"]
-	46 [label="None <= None
- gini = None
- samples = 32
- value = [None, None]"]
-	47 [label="Age <= 31
- gini = 0.22536475869809203
- samples = 135
- value = [61, 62]"]
-	48 [label="None <= None
- gini = None
- samples = 46
- value = [None, None]"]
-	49 [label="None <= None
- gini = None
- samples = 32
- value = [None, None]"]
-	50 [label="None <= None
- gini = None
- samples = 32
- value = [None, None]"]
-	51 [label="None <= None
- gini = None
+ value = [None, None] 
+ out = 1"]
+	24 [label="None <= None
+ entropy = 0.7455178428108284
+ samples = 33
+ value = [None, None] 
+ out = 1"]
+	25 [label="None <= None
+ entropy = 0.7706290693639405
  samples = 31
- value = [None, None]"]
-	52 [label="None <= None
- gini = None
- samples = 32
- value = [None, None]"]
-	53 [label="AnnualIncome <= 700000
- gini = 0.35954597591955356
- samples = 168
- value = [63, 64]"]
-	54 [label="AnnualIncome <= 1150000
- gini = 0.33231319554848965
- samples = 85
- value = [65, 66]"]
-	55 [label="None <= None
- gini = None
- samples = 36
- value = [None, None]"]
-	56 [label="FamilyMembers <= 3
- gini = 0.2364369501466277
+ value = [None, None] 
+ out = 1"]
+	26 [label="AnnualIncome <= 1450000
+ entropy = 0.4558314584408234
+ samples = 73
+ value = [37, 38] 
+ out = None"]
+	27 [label="AnnualIncome <= 850000
+ entropy = 0.6967516146482493
+ samples = 245
+ value = [39, 40] 
+ out = None"]
+	28 [label="FamilyMembers <= 5
+ entropy = 0.873298419882363
+ samples = 109
+ value = [41, 42] 
+ out = None"]
+	29 [label="Age <= 30
+ entropy = 0.6890419136047908
+ samples = 353
+ value = [43, 44] 
+ out = None"]
+	30 [label="AnnualIncome <= 1150000
+ entropy = 0.8550693920555503
+ samples = 143
+ value = [45, 46] 
+ out = None"]
+	31 [label="None <= None
+ entropy = 0.9994110647387552
+ samples = 35
+ value = [None, None] 
+ out = 0"]
+	32 [label="ChronicDiseases <= 0
+ entropy = 0.9501471356162103
+ samples = 176
+ value = [47, 48] 
+ out = None"]
+	33 [label="Age <= 28
+ entropy = 0.8165187119538281
+ samples = 75
+ value = [49, 50] 
+ out = None"]
+	34 [label="None <= None
+ entropy = 0.9852281360342515
+ samples = 42
+ value = [None, None] 
+ out = 0"]
+	35 [label="None <= None
+ entropy = 0.7990485210442682
+ samples = 33
+ value = [None, None] 
+ out = 1"]
+	36 [label="None <= None
+ entropy = 0.7088356733321961
+ samples = 31
+ value = [None, None] 
+ out = 1"]
+	37 [label="None <= None
+ entropy = 0.5916727785823275
+ samples = 35
+ value = [None, None] 
+ out = 1"]
+	38 [label="None <= None
+ entropy = 0.3984592740952357
+ samples = 38
+ value = [None, None] 
+ out = 1"]
+	39 [label="AnnualIncome <= 650000
+ entropy = 0.6348379815466055
+ samples = 181
+ value = [51, 52] 
+ out = None"]
+	40 [label="Age <= 32
+ entropy = 0.8351164948421137
  samples = 64
- value = [67, 68]"]
-	57 [label="AnnualIncome <= 550000
- gini = 0.34186818397344704
- samples = 76
- value = [69, 70]"]
-	58 [label="None <= None
- gini = None
- samples = 33
- value = [None, None]"]
-	59 [label="None <= None
- gini = None
+ value = [53, 54] 
+ out = None"]
+	41 [label="Age <= 31
+ entropy = 0.8175072881213616
+ samples = 63
+ value = [55, 56] 
+ out = None"]
+	42 [label="None <= None
+ entropy = 0.9321115676166747
+ samples = 46
+ value = [None, None] 
+ out = 0"]
+	43 [label="AnnualIncome <= 1050000
+ entropy = 0.7090981117542694
+ samples = 253
+ value = [57, 58] 
+ out = None"]
+	44 [label="Age <= 33
+ entropy = 0.8414646362081757
+ samples = 100
+ value = [59, 60] 
+ out = None"]
+	45 [label="AnnualIncome <= 900000
+ entropy = 0.6464599001526787
+ samples = 109
+ value = [61, 62] 
+ out = None"]
+	46 [label="None <= None
+ entropy = 0.9081783472997051
  samples = 34
- value = [None, None]"]
-	60 [label="Age <= 28
- gini = 0.4838383838383839
- samples = 91
- value = [71, 72]"]
-	61 [label="AnnualIncome <= 400000
- gini = 0.163020030816641
- samples = 99
- value = [73, 74]"]
-	62 [label="None <= None
- gini = None
- samples = 36
- value = [None, None]"]
-	63 [label="AnnualIncome <= 550000
- gini = 0.33909706760149705
- samples = 101
- value = [75, 76]"]
-	64 [label="FamilyMembers <= 3
- gini = 0.3929284060978529
- samples = 67
- value = [77, 78]"]
-	65 [label="None <= None
- gini = None
- samples = 48
- value = [None, None]"]
-	66 [label="None <= None
- gini = None
- samples = 37
- value = [None, None]"]
-	67 [label="None <= None
- gini = None
- samples = 31
- value = [None, None]"]
-	68 [label="None <= None
- gini = None
- samples = 33
- value = [None, None]"]
-	69 [label="None <= None
- gini = None
- samples = 37
- value = [None, None]"]
-	70 [label="None <= None
- gini = None
+ value = [None, None] 
+ out = 0"]
+	47 [label="AnnualIncome <= 650000
+ entropy = 0.9709505944546686
+ samples = 125
+ value = [63, 64] 
+ out = None"]
+	48 [label="None <= None
+ entropy = 0.8739810481273578
+ samples = 51
+ value = [None, None] 
+ out = 0"]
+	49 [label="None <= None
+ entropy = 0.6193821946787638
  samples = 39
- value = [None, None]"]
-	71 [label="None <= None
- gini = None
+ value = [None, None] 
+ out = 0"]
+	50 [label="None <= None
+ entropy = 0.8524051786494786
  samples = 36
- value = [None, None]"]
-	72 [label="None <= None
- gini = None
- samples = 55
- value = [None, None]"]
-	73 [label="None <= None
- gini = None
- samples = 59
- value = [None, None]"]
-	74 [label="None <= None
- gini = None
- samples = 40
- value = [None, None]"]
-	75 [label="None <= None
- gini = None
- samples = 57
- value = [None, None]"]
-	76 [label="None <= None
- gini = None
- samples = 44
- value = [None, None]"]
-	77 [label="None <= None
- gini = None
- samples = 34
- value = [None, None]"]
-	78 [label="None <= None
- gini = None
+ value = [None, None] 
+ out = 0"]
+	51 [label="Age <= 31
+ entropy = 0.5665095065529053
+ samples = 135
+ value = [65, 66] 
+ out = None"]
+	52 [label="None <= None
+ entropy = 0.7935912300117064
+ samples = 46
+ value = [None, None] 
+ out = 0"]
+	53 [label="None <= None
+ entropy = 0.8112781244591328
+ samples = 32
+ value = [None, None] 
+ out = 0"]
+	54 [label="None <= None
+ entropy = 0.8571484374283715
+ samples = 32
+ value = [None, None] 
+ out = 0"]
+	55 [label="None <= None
+ entropy = 0.907165767573082
+ samples = 31
+ value = [None, None] 
+ out = 0"]
+	56 [label="None <= None
+ entropy = 0.8112781244591328
+ samples = 32
+ value = [None, None] 
+ out = 0"]
+	57 [label="AnnualIncome <= 700000
+ entropy = 0.7024665512903903
+ samples = 168
+ value = [67, 68] 
+ out = None"]
+	58 [label="AnnualIncome <= 1150000
+ entropy = 0.9018043446575508
+ samples = 85
+ value = [69, 70] 
+ out = None"]
+	59 [label="None <= None
+ entropy = 0.8524051786494786
+ samples = 36
+ value = [None, None] 
+ out = 0"]
+	60 [label="FamilyMembers <= 3
+ entropy = 0.4980278865344765
+ samples = 64
+ value = [71, 72] 
+ out = None"]
+	61 [label="AnnualIncome <= 550000
+ entropy = 0.6601070987550469
+ samples = 76
+ value = [73, 74] 
+ out = None"]
+	62 [label="None <= None
+ entropy = 0.8849636363831528
  samples = 33
- value = [None, None]"]
+ value = [None, None] 
+ out = 0"]
+	63 [label="None <= None
+ entropy = 0.9975025463691153
+ samples = 34
+ value = [None, None] 
+ out = 0"]
+	64 [label="Age <= 28
+ entropy = 0.9534158774525225
+ samples = 91
+ value = [75, 76] 
+ out = None"]
+	65 [label="AnnualIncome <= 400000
+ entropy = 0.47218938467675076
+ samples = 99
+ value = [77, 78] 
+ out = None"]
+	66 [label="None <= None
+ entropy = 0.7642045065086203
+ samples = 36
+ value = [None, None] 
+ out = 0"]
+	67 [label="AnnualIncome <= 550000
+ entropy = 0.6975195309289137
+ samples = 101
+ value = [79, 80] 
+ out = None"]
+	68 [label="FamilyMembers <= 3
+ entropy = 0.9132401614300725
+ samples = 67
+ value = [81, 82] 
+ out = None"]
+	69 [label="None <= None
+ entropy = 0.6962122601251458
+ samples = 48
+ value = [None, None] 
+ out = 0"]
+	70 [label="None <= None
+ entropy = 0.8003922080453356
+ samples = 37
+ value = [None, None] 
+ out = 0"]
+	71 [label="None <= None
+ entropy = 0.7088356733321961
+ samples = 31
+ value = [None, None] 
+ out = 0"]
+	72 [label="None <= None
+ entropy = 0.4394969869215134
+ samples = 33
+ value = [None, None] 
+ out = 0"]
+	73 [label="None <= None
+ entropy = 0.5713549744279549
+ samples = 37
+ value = [None, None] 
+ out = 0"]
+	74 [label="None <= None
+ entropy = 0.9182958340544896
+ samples = 39
+ value = [None, None] 
+ out = 0"]
+	75 [label="None <= None
+ entropy = 0.943601631299382
+ samples = 36
+ value = [None, None] 
+ out = 0"]
+	76 [label="None <= None
+ entropy = 0.9978527766088781
+ samples = 55
+ value = [None, None] 
+ out = 1"]
+	77 [label="None <= None
+ entropy = 0.5254506799086206
+ samples = 59
+ value = [None, None] 
+ out = 0"]
+	78 [label="None <= None
+ entropy = 0.28639695711595625
+ samples = 40
+ value = [None, None] 
+ out = 0"]
+	79 [label="None <= None
+ entropy = 0.6292492238560345
+ samples = 57
+ value = [None, None] 
+ out = 0"]
+	80 [label="None <= None
+ entropy = 0.9023932827949788
+ samples = 44
+ value = [None, None] 
+ out = 0"]
+	81 [label="None <= None
+ entropy = 0.833764907210665
+ samples = 34
+ value = [None, None] 
+ out = 0"]
+	82 [label="None <= None
+ entropy = 0.8453509366224364
+ samples = 33
+ value = [None, None] 
+ out = 0"]
 	0 -> 1
 	0 -> 2
 	1 -> 3
@@ -325,72 +424,76 @@ digraph {
 	3 -> 8
 	4 -> 9
 	4 -> 10
-	6 -> 11
-	6 -> 12
-	7 -> 13
-	7 -> 14
-	8 -> 15
-	8 -> 16
-	10 -> 17
-	10 -> 18
-	11 -> 19
-	11 -> 20
-	12 -> 21
-	12 -> 22
-	14 -> 23
-	14 -> 24
-	15 -> 25
-	15 -> 26
+	5 -> 11
+	5 -> 12
+	6 -> 13
+	6 -> 14
+	7 -> 15
+	7 -> 16
+	8 -> 17
+	8 -> 18
+	10 -> 19
+	10 -> 20
+	11 -> 21
+	11 -> 22
+	12 -> 23
+	12 -> 24
+	14 -> 25
+	14 -> 26
 	16 -> 27
 	16 -> 28
 	17 -> 29
 	17 -> 30
-	19 -> 31
-	19 -> 32
-	22 -> 33
-	22 -> 34
-	23 -> 35
-	23 -> 36
-	24 -> 37
-	24 -> 38
-	25 -> 39
-	25 -> 40
-	26 -> 41
-	26 -> 42
-	28 -> 43
-	28 -> 44
-	29 -> 45
-	29 -> 46
-	35 -> 47
-	35 -> 48
-	36 -> 49
-	36 -> 50
-	37 -> 51
-	37 -> 52
-	39 -> 53
-	39 -> 54
-	40 -> 55
-	40 -> 56
-	41 -> 57
-	41 -> 58
-	43 -> 59
-	43 -> 60
-	47 -> 61
-	47 -> 62
-	53 -> 63
-	53 -> 64
-	54 -> 65
-	54 -> 66
-	56 -> 67
-	56 -> 68
-	57 -> 69
-	57 -> 70
+	18 -> 31
+	18 -> 32
+	20 -> 33
+	20 -> 34
+	21 -> 35
+	21 -> 36
+	26 -> 37
+	26 -> 38
+	27 -> 39
+	27 -> 40
+	28 -> 41
+	28 -> 42
+	29 -> 43
+	29 -> 44
+	30 -> 45
+	30 -> 46
+	32 -> 47
+	32 -> 48
+	33 -> 49
+	33 -> 50
+	39 -> 51
+	39 -> 52
+	40 -> 53
+	40 -> 54
+	41 -> 55
+	41 -> 56
+	43 -> 57
+	43 -> 58
+	44 -> 59
+	44 -> 60
+	45 -> 61
+	45 -> 62
+	47 -> 63
+	47 -> 64
+	51 -> 65
+	51 -> 66
+	57 -> 67
+	57 -> 68
+	58 -> 69
+	58 -> 70
 	60 -> 71
 	60 -> 72
 	61 -> 73
 	61 -> 74
-	63 -> 75
-	63 -> 76
-	64 -> 77
-	64 -> 78
+	64 -> 75
+	64 -> 76
+	65 -> 77
+	65 -> 78
+	67 -> 79
+	67 -> 80
+	68 -> 81
+	68 -> 82
 }

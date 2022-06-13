@@ -5,10 +5,11 @@ Created on Mon Oct 22 19:02:26 2018
 @author: L-ear
 """
 import time
-import pandas as pd
+
 import numpy as np
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+import pandas as pd
 from graphviz import Digraph
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 le = LabelEncoder()
 sc = StandardScaler()
@@ -96,6 +97,7 @@ def entropy_min(leaf, min_sample_leaf):
             IG_left = []
             IG_right = []
             IG = []
+
             bool_indexby0 = data.iloc[:, feature] == 0
             bool_indexby1 = data.iloc[:, feature] == 1
             s1 = data.loc[bool_indexby0, data.columns[data.shape[1] - 1]]
@@ -108,7 +110,7 @@ def entropy_min(leaf, min_sample_leaf):
             entr_right = entropy(s2)
             IG_left.append(entr_left)
             IG_right.append(entr_right)
-            res.append((entr_left, entr_right ,leaf.Entropy - ((S1 / S) * entr_left + (S2 / S) * entr_right), feature, 0))
+            res.append((entr_left, entr_right, leaf.Entropy - ((S1 / S) * entr_left + (S2 / S) * entr_right), feature, 0))
         else:
             IG_left = []
             IG_right = []
@@ -132,75 +134,16 @@ def entropy_min(leaf, min_sample_leaf):
                     IG_left.append(entr_left)
                     IG_right.append(entr_right)
                     IG.append((leaf.Entropy - ((S1/S)*entr_left + (S2/S) * entr_right), s.iloc[i,1]))
-            print(feature)
-            print(IG)
             if IG:
                 # выбираем наименьший индекс джини
                 entr, split = max(IG, key=lambda x: x[0])
                 index = IG.index((entr, split))
                 # сохраняем индекс, столбец, значение разделителя
                 res.append((IG_left[index], IG_right[index], entr ,feature, split))
-                print('res = ', res)
-                print()
     if res:
         left, right, _, feature, split = max(res, key=lambda x: x[2])
-        return (left, right, feature, split)
-    else:
-        return None
-
-def gini_min(data, min_sample_leaf):
-    # Получение лучшего разделения в наборе данных в соответствии с коэффициентом Джини
-    res = []  # список троек(gini,feature,split)
-    S = data.shape[0]  # S - количество строк в датасете (объектов)
-    for feature in np.arange(0, data.shape[1] - 1):
-        # Сначала определите, является ли столбец переменной onehot, чтобы избежать сортировки переменной onehot.
-        if boolAttrOrNot(data, feature):
-            bool_indexby0 = data.iloc[:, feature] == 0
-            bool_indexby1 = data.iloc[:, feature] == 1
-            s1 = data.loc[bool_indexby0, data.columns[data.shape[1] - 1]]
-            S1 = s1.shape[0]
-            S2 = S - S1
-            if S1 < min_sample_leaf or S2 < min_sample_leaf:
-                continue
-            s2 = data.loc[bool_indexby1, data.columns[data.shape[1] - 1]]
-            res.append(((S1 * gini(s1) + S2 * gini(s2)) / S, feature, 0))
-        else:
-            Gini_list = []  # Список из двух кортежей (gini,split), в котором хранится оптимальное значение Джини и точка разделения каждой функции.
-            # iloc помогает выбрать ячейки датасета, в нашем случае мы берем все строки и столбцы от 0 до feature
-            # целева переменная на 0 месте
-            s = data.iloc[:, [data.shape[1] - 1, feature]]
-            # сортируем первые два столбца по первому столбцу по возрастанию
-            s = s.sort_values(s.columns[1])
-            # цикл начинается с min_sample_leaf-1, в нашем случае min_sample_leaf = 31 => с 30 до (количество строк в датасете - min_sample_leaf)
-            for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
-                # ищем переход значения в поле столбца, тоесть с 0 на 1, с 1 на 2 и тп
-                # ищем не по 0 столбцу, потому что в нулевом целевая переменная
-                if s.iloc[i, 1] == s.iloc[i + 1, 1]:
-                    continue
-                else:
-                    # S1 = число = количество полей от начала датасета до точки разделения
-                    # для примера, если датасет состоит из 600 строк
-                    # и точка разделения (перехода с 0 на 1) на 143 позиции
-                    # то S1 = 144, а S2 = 456
-                    S1 = i + 1
-                    # S2 = число = количество полей от точки разделения до конца датасета
-                    S2 = S - S1
-                    # s1 и s2 - наборы данных до разделителя и после разделителя соответственно
-                    s1 = data.iloc[:(i + 1), data.shape[1] - 1]
-                    s2 = data.iloc[(i + 1):, data.shape[1] - 1]
-                    # добавляем в список (Gini_list) наш найденный индекс джини
-                    # для разбиения в узле и значение поля по которому было разбиение
-                    Gini_list.append(((S1 * gini(s1) + S2 * gini(s2)) / S, s.iloc[i, 1]))
-            # бывают случаи, Gini_list пуст
-            if Gini_list:
-                # выбираем наименьший индекс джини
-                Gini_min, split = min(Gini_list, key=lambda x: x[0])
-                # сохраняем индекс, столбец, значение разделителя
-                res.append((Gini_min, feature, split))
-    # res также может быть пустым
-    if res:
-        _, feature, split = min(res, key=lambda x: x[0])
-        return (_, data.columns[feature], split)
+        print((left, right, data.columns[feature], split))
+        return (left, right, data.columns[feature], split)
     else:
         return None
 
@@ -209,7 +152,10 @@ def entropy(s):
     # если в столбце 144 значения, из них 51 единица и 91 нуль, то вернет
     # 51/144 и 91/144 => 0.35416667 , 0.64583333
     p = np.array(s.value_counts(True))
-    entr = -(p[0] * np.log2(p[0]) + p[1] * np.log2(p[1]))
+    if p.size == 1:
+        entr = 0
+    else:
+        entr = -p[0] * np.log2(p[0]) - p[1] * np.log2(p[1])
     return entr
 
 
@@ -277,7 +223,7 @@ if __name__ == "__main__":
     t3 = time.time()
     for i in range(len(tree)):
         dot.node(str(i),
-                 f'{tree[i].feature} <= {tree[i].split}\n entropy = {tree[i].Entropy}\n samples = {tree[i].data}\n value = {[tree[i].left, tree[i].right]}')
+                 f'{tree[i].feature} <= {tree[i].split}\n entropy = {tree[i].Entropy}\n samples = {tree[i].data.shape[0]}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
     for i in range(len(tree)):
         left = tree[i].left
         right = tree[i].right
