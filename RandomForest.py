@@ -13,20 +13,24 @@ def RandomForest(train, n_trees, min_sample_leaf, ip, jp):
     fn = int(jp*(train.shape[1]-1))
     for n in range(n_trees):
         t1 = time.time()
-        # выбирааем 5 рандомных столбцов
+        # выбирааем fn(5) рандомных столбцов
         sf = np.random.choice(
                 np.arange(0,train.shape[1]-1),
                 fn,
                 replace=False)
         sf = np.append(train.shape[1]-1,sf) # Убедитесь, что метка находится в первом столбце
+        # разворачиваем список, чтобы целевая переменная стояла в первом столбце
         sf = np.flip(sf)
+        # берем все строки для тестовой выборки
         train_n = train.iloc[:,sf]
+        # берем часть выборки применив найденный коэффициент
         p = np.random.random_sample()*(1-ip)+ip
         train_n = train_n.loc[
                 np.random.choice(train_n.index,
                                  int(p*train_n.index.size),
                                  replace=False)]
         # train_n — обучающая выборка случайно выбранного n-го дерева.
+        # обучаем дерево решений и сохраняем в массив "лес"
         forest.append(DT.build_tree(train_n, min_sample_leaf))
         t2 = time.time()
         print('Время построения %d модели дерева = %f'%(n,t2-t1))
@@ -42,7 +46,7 @@ def hit_rate(forest, test):
     length = y.size
     y_p = pd.Series([test.shape[1]-1]*length,index=y.index)
     n_trees = len(forest)
-    res = [0]*n_trees # 存放每棵树的预测结果
+    res = [0]*n_trees # Сохранение результатов прогнозирования для каждого дерева
     for i in range(length):
         x = test.iloc[i]
         for t in range(n_trees):
@@ -54,7 +58,7 @@ def hit_rate(forest, test):
 if __name__ == "__main__":
     ip = 0.85
     jp = 0.7
-    n_trees = 60
+    n_trees = 30
     min_sample_leaf = 5
     # Вышеупомянутый параметр должен быть скорректирован
     train = pd.read_csv("data/train1.csv")
