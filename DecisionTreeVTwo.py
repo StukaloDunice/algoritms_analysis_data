@@ -20,7 +20,8 @@ class node:
     def __init__(self, data,
                  left=None, right=None,
                  feature=None, split=None,
-                 out=None, Entropy=None
+                 out=None, Entropy=None,
+                 ig =None
                  ):
         self.data = data  # коллекция Индекс строки коллекции, попадающей на узел
         self.left = left  # int индекс левого поддерева
@@ -29,6 +30,7 @@ class node:
         self.split = split  # int or float разделитель
         self.out = out  # Выходное значение конечного узла
         self.Entropy = Entropy
+        self.ig = ig
 
 
 def build_tree(S, min_sample_leaf):
@@ -79,7 +81,7 @@ def divide(leaf, min_sample_leaf):
     if not res:
         leaf.out = data.iloc[:, data.shape[1] - 1].mode()[0]  # Режим как результат предсказания, тоесть значение, которое появляется чаще всего. Это может быть несколько значений.
         return None
-    entropy_left, entropy_right, feature, split = res
+    entropy_left, entropy_right,ig, feature, split = res
     # Возвращаемое значение функции gini_min представляет собой два кортежа (лучшая функция сегментации, значение сегментации)
     leaf.feature = feature
     leaf.split = split
@@ -136,14 +138,13 @@ def entropy_min(leaf, min_sample_leaf):
                     IG.append((leaf.Entropy - ((S1/S)*entr_left + (S2/S) * entr_right), s.iloc[i,1]))
             if IG:
                 # выбираем наименьший индекс джини
-                entr, split = max(IG, key=lambda x: x[0])
-                index = IG.index((entr, split))
+                ig, split = max(IG, key=lambda x: x[0])
+                index = IG.index((ig, split))
                 # сохраняем индекс, столбец, значение разделителя
-                res.append((IG_left[index], IG_right[index], entr ,feature, split))
+                res.append((IG_left[index], IG_right[index], ig ,feature, split))
     if res:
         left, right, _, feature, split = max(res, key=lambda x: x[2])
-        print((left, right, data.columns[feature], split))
-        return (left, right, data.columns[feature], split)
+        return (left, right,_, data.columns[feature], split)
     else:
         return None
 
@@ -234,11 +235,100 @@ if __name__ == "__main__":
             dot.edge(str(i), str(left))
         elif right != None:
             dot.edge(str(i), str(right))
-    dot.render(directory='doctest-output', view=True)
+    dot.render(directory='doctest-output')
+    print('80% обучающей выборки')
     print('Время построения дерева решений равно：%f' % (t2 - t1))
     print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
     print('Точность классификации：%f' % score)
     print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    print()
+
+    dot2 = Digraph()
+    train2 = pd.read_csv("data/train2.csv")
+    test2 = pd.read_csv("data/test2.csv")
+    train2 = train2.drop(['Unnamed: 0'], axis=1)
+    test2 = test2.drop(['Unnamed: 0'], axis=1)
+    text_train2 = train2.select_dtypes(include='object').columns
+    float1_train2 = train2.select_dtypes(exclude='object').columns
+    text_test2 = test2.select_dtypes(include='object').columns
+    float1_test2 = test2.select_dtypes(exclude='object').columns
+    for col in text_train2:
+        train2[col] = le.fit_transform(train2[col])
+    for col in text_test2:
+        test2[col] = le.fit_transform(test2[col])
+    t1 = time.time()
+    min_sample_leaf = 31
+    tree2 = build_tree(train2, min_sample_leaf)
+    t2 = time.time()
+    score = hit_rate(tree2, test2)
+    t3 = time.time()
+    for i in range(len(tree2)):
+        dot2.node(str(i),
+                 f'{tree2[i].feature} <= {tree2[i].split}\n entropy = {tree2[i].Entropy}\n samples = {tree2[i].data.shape[0]}\n value = {[tree2[i].left, tree2[i].right]} \n out = {tree2[i].out}')
+    for i in range(len(tree2)):
+        left = tree2[i].left
+        right = tree2[i].right
+        if left != None and right != None:
+            for j in range(left, right + 1):
+                dot2.edge(str(i), str(j))
+        elif left != None:
+            dot2.edge(str(i), str(left))
+        elif right != None:
+            dot2.edge(str(i), str(right))
+    dot2.render(directory='doctest-output')
+    print('50% обучающей выборки')
+    print('Время построения дерева решений равно：%f' % (t2 - t1))
+    print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
+    print('Точность классификации：%f' % score)
+    print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    print()
+
+    dot3 = Digraph()
+    train3 = pd.read_csv("data/train3.csv")
+    test3 = pd.read_csv("data/test3.csv")
+    train3 = train3.drop(['Unnamed: 0'], axis=1)
+    test3 = test3.drop(['Unnamed: 0'], axis=1)
+    text_train3 = train3.select_dtypes(include='object').columns
+    float1_train3 = train3.select_dtypes(exclude='object').columns
+    text_test3 = test3.select_dtypes(include='object').columns
+    float1_test3 = test3.select_dtypes(exclude='object').columns
+    for col in text_train3:
+        train3[col] = le.fit_transform(train3[col])
+    for col in text_test3:
+        test3[col] = le.fit_transform(test3[col])
+    t1 = time.time()
+    min_sample_leaf = 31
+    tree = build_tree(train3, min_sample_leaf)
+    t2 = time.time()
+    score = hit_rate(tree, test3)
+    t3 = time.time()
+    for i in range(len(tree)):
+        dot3.node(str(i),
+                 f'{tree[i].feature} <= {tree[i].split}\n entropy = {tree[i].Entropy}\n samples = {tree[i].data.shape[0]}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
+    for i in range(len(tree)):
+        left = tree[i].left
+        right = tree[i].right
+        if left != None and right != None:
+            for j in range(left, right + 1):
+                dot3.edge(str(i), str(j))
+        elif left != None:
+            dot3.edge(str(i), str(left))
+        elif right != None:
+            dot3.edge(str(i), str(right))
+    dot3.render(directory='doctest-output', view=True)
+    print('20% обучающей выборки')
+    print('Время построения дерева решений равно：%f' % (t2 - t1))
+    print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
+    print('Точность классификации：%f' % score)
+    print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    print()
+
+
+
+
+
+
+
 
 
 

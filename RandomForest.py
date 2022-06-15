@@ -82,4 +82,46 @@ if __name__ == "__main__":
     print('Значения параметров: n_trees=%d,min_sample_leaf=%d,ip=%f,jp=%f'%(n_trees,min_sample_leaf,ip,jp))
     print('Точность алгоритма = %f'%score)
 
+    train2 = pd.read_csv("data/train2.csv")
+    test2 = pd.read_csv("data/test2.csv")
+    train2 = train2.drop(['Unnamed: 0'], axis=1)
+    test2 = test2.drop(['Unnamed: 0'], axis=1)
+    text_train2 = train2.select_dtypes(include='object').columns
+    float1_train2 = train2.select_dtypes(exclude='object').columns
+    text_test2 = test2.select_dtypes(include='object').columns
+    float1_test3 = test2.select_dtypes(exclude='object').columns
+    for col in text_train2:
+        train2[col] = le.fit_transform(train2[col])
+    for col in text_test2:
+        test2[col] = le.fit_transform(test2[col])
+    t1 = time.time()
+    forest = RandomForest(train2, n_trees,min_sample_leaf, ip, jp)
+    t2 = time.time()
+    score = hit_rate(forest, test2)
+    t3 = time.time()
+    print('Время классификации набора тестов равно %f'%(t2-t1))
+    print('Значения параметров: n_trees=%d,min_sample_leaf=%d,ip=%f,jp=%f'%(n_trees,min_sample_leaf,ip,jp))
+    print('Точность алгоритма = %f'%score)
 
+
+    train3 = pd.read_csv("data/train3.csv")
+    test3 = pd.read_csv("data/test3.csv")
+    train3 = train3.drop(['Unnamed: 0'], axis=1)
+    test3 = test3.drop(['Unnamed: 0'], axis=1)
+    text_train3 = train3.select_dtypes(include='object').columns
+    float1_train3 = train3.select_dtypes(exclude='object').columns
+    text_test3 = test3.select_dtypes(include='object').columns
+    float1_test3 = test3.select_dtypes(exclude='object').columns
+    for col in text_train3:
+        train3[col] = le.fit_transform(train3[col])
+    for col in text_test3:
+        test3[col] = le.fit_transform(test3[col])
+    t1 = time.time()
+    min_sample_leaf = 31
+    score = RandomForest(train3, n_trees ,min_sample_leaf, ip, jp)
+    t2 = time.time()
+    score = hit_rate(score, test3)
+    t3 = time.time()
+    print('Время классификации набора тестов равно %f'%(t2-t1))
+    print('Значения параметров: n_trees=%d,min_sample_leaf=%d,ip=%f,jp=%f'%(n_trees,min_sample_leaf,ip,jp))
+    print('Точность алгоритма = %f'%score)
