@@ -203,8 +203,8 @@ def hit_rate(tree, test):
 
 if __name__ == "__main__":
     dot = Digraph()
-    train = pd.read_csv("data/train1.csv")
-    test = pd.read_csv("data/test1.csv")
+    train = pd.read_csv("../data/train1.csv")
+    test = pd.read_csv("../data/test1.csv")
     train = train.drop(['Unnamed: 0'], axis=1)
     test = test.drop(['Unnamed: 0'], axis=1)
     text_train = train.select_dtypes(include='object').columns
@@ -244,8 +244,8 @@ if __name__ == "__main__":
     print()
 
     dot2 = Digraph()
-    train2 = pd.read_csv("data/train2.csv")
-    test2 = pd.read_csv("data/test2.csv")
+    train2 = pd.read_csv("../data/train2.csv")
+    test2 = pd.read_csv("../data/test2.csv")
     train2 = train2.drop(['Unnamed: 0'], axis=1)
     test2 = test2.drop(['Unnamed: 0'], axis=1)
     text_train2 = train2.select_dtypes(include='object').columns
@@ -284,8 +284,8 @@ if __name__ == "__main__":
     print()
 
     dot3 = Digraph()
-    train3 = pd.read_csv("data/train3.csv")
-    test3 = pd.read_csv("data/test3.csv")
+    train3 = pd.read_csv("../data/train3.csv")
+    test3 = pd.read_csv("../data/test3.csv")
     train3 = train3.drop(['Unnamed: 0'], axis=1)
     test3 = test3.drop(['Unnamed: 0'], axis=1)
     text_train3 = train3.select_dtypes(include='object').columns

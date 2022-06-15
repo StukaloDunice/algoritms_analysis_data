@@ -1,5 +1,4 @@
-import DecisionTree as DT
-import DecisionTreeVTwo as DT45
+from algoritms import DecisionTree as DT
 import numpy as np
 import pandas as pd
 import time
@@ -62,8 +61,8 @@ if __name__ == "__main__":
     n_trees = 30
     min_sample_leaf = 5
     # Вышеупомянутый параметр должен быть скорректирован
-    train = pd.read_csv("data/train1.csv")
-    test = pd.read_csv("data/test1.csv")
+    train = pd.read_csv("../data/train1.csv")
+    test = pd.read_csv("../data/test1.csv")
     train = train.drop(['Unnamed: 0'], axis=1)
     test = test.drop(['Unnamed: 0'], axis=1)
     text_train = train.select_dtypes(include='object').columns
@@ -82,8 +81,8 @@ if __name__ == "__main__":
     print('Значения параметров: n_trees=%d,min_sample_leaf=%d,ip=%f,jp=%f'%(n_trees,min_sample_leaf,ip,jp))
     print('Точность алгоритма = %f'%score)
 
-    train2 = pd.read_csv("data/train2.csv")
-    test2 = pd.read_csv("data/test2.csv")
+    train2 = pd.read_csv("../data/train2.csv")
+    test2 = pd.read_csv("../data/test2.csv")
     train2 = train2.drop(['Unnamed: 0'], axis=1)
     test2 = test2.drop(['Unnamed: 0'], axis=1)
     text_train2 = train2.select_dtypes(include='object').columns
@@ -104,8 +103,8 @@ if __name__ == "__main__":
     print('Точность алгоритма = %f'%score)
 
 
-    train3 = pd.read_csv("data/train3.csv")
-    test3 = pd.read_csv("data/test3.csv")
+    train3 = pd.read_csv("../data/train3.csv")
+    test3 = pd.read_csv("../data/test3.csv")
     train3 = train3.drop(['Unnamed: 0'], axis=1)
     test3 = test3.drop(['Unnamed: 0'], axis=1)
     text_train3 = train3.select_dtypes(include='object').columns
@@ -117,7 +116,6 @@ if __name__ == "__main__":
     for col in text_test3:
         test3[col] = le.fit_transform(test3[col])
     t1 = time.time()
-    min_sample_leaf = 31
     score = RandomForest(train3, n_trees ,min_sample_leaf, ip, jp)
     t2 = time.time()
     score = hit_rate(score, test3)

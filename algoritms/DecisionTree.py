@@ -10,8 +10,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from graphviz import Digraph
 import sys
-from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLabel, QApplication, QPushButton, QVBoxLayout, QComboBox)
-from PyQt5.QtGui import QPixmap
+
 
 le = LabelEncoder()
 sc = StandardScaler()
@@ -93,31 +92,6 @@ def divide(S, leaf, min_sample_leaf):
     left = node(data[data[feature] <= split].index)
     right = node(data[data[feature] > split].index)
     return left, right
-
-
-def entropy_min(data, min_sample_leaf):
-    res = []  # список троек(gini,feature,split)
-    S = data.shape[0]  # S - количество строк в датасете (объектов)
-    for feature in np.arange(0, data.shape[1] - 1):
-        IG = [1]
-        Entropy_list_left = [1]
-        Entropy_list_right = [1]
-        s = data.iloc[:, [data.shape[1] - 1, feature]]
-        # сортируем первые два столбца по первому столбцу по возрастанию
-        s = s.sort_values(s.columns[1])
-        # цикл начинается с min_sample_leaf-1, в нашем случае min_sample_leaf = 31 => с 30 до (количество строк в датасете - min_sample_leaf)
-        for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
-            S1 = i + 1
-            # S2 = число = количество полей от точки разделения до конца датасета
-            S2 = S - S1
-            # s1 и s2 - наборы данных до разделителя и после разделителя соответственно
-            s1 = data.iloc[:(i + 1), data.shape[1] - 1]
-            s2 = data.iloc[(i + 1):, data.shape[1] - 1]
-            Entropy_list_left.append(entropy(s1))
-            Entropy_list_right.append(entropy(s2))
-            IG.append()
-        print('left = ',min(Entropy_list_left))
-        print('right = ',min(Entropy_list_right))
 
 def gini_min(data, min_sample_leaf):
     # Получение лучшего разделения в наборе данных в соответствии с коэффициентом Джини
@@ -221,9 +195,9 @@ def classifier(tree, sample):
 def hit_rate(tree, test):
     # Получить результаты классификации образцов один за другим
     # Сравните данные атрибута метки, чтобы определить, является ли классификация точной
-    y = test.pop(test.columns[test.shape[1]-1])
+    y = test.iloc[:,test.shape[1]-1]
     length = y.size
-    y_p = pd.Series([test.shape[1]-1]*length,index=y.index)
+    y_p = pd.Series([0]*length,index=y.index)
     for i in range(length):
         x = test.iloc[i]
         y_p.iloc[i] = classifier(tree,x)
@@ -232,44 +206,12 @@ def hit_rate(tree, test):
     return deta[deta==0].size/length
 
 
-class Example(QWidget):
 
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-
-    def initUI(self):
-        self.setGeometry(300,300, 800, 600)
-
-        hbox1 = QHBoxLayout()
-        hbox2 = QHBoxLayout()
-        vbox = QVBoxLayout()
-        vbox.addLayout(hbox2)
-        vbox.addLayout(hbox1)
-
-        combo = QComboBox()
-        combo.addItems(["20% выборки", "50% выборки",
-                        "80% выборки"])
-        hbox2.addWidget(combo)
-        combo.activated[str].connect(self.onActivated)
-
-        pixmap = QPixmap("./doctest-output/Digraph.gv.png")
-        pixmap = pixmap.scaled(QWidget.size(self).width(),QWidget.size(self).height())
-        print(QWidget.size(self))
-        lbl = QLabel()
-        lbl.setPixmap(pixmap)
-        hbox1.addWidget(lbl)
-
-        self.setLayout(vbox)
-        self.setWindowTitle('Red Rock')
-        self.show()
-    def onActivated(self, text):
-        print(text)
 
 if __name__ == "__main__":
     dot = Digraph(format='png')
-    train = pd.read_csv("data/train1.csv")
-    test = pd.read_csv("data/test1.csv")
+    train = pd.read_csv("../data/train1.csv")
+    test = pd.read_csv("../data/test1.csv")
     train = train.drop(['Unnamed: 0'], axis=1)
     test = test.drop(['Unnamed: 0'], axis=1)
     text_train = train.select_dtypes(include='object').columns
@@ -307,8 +249,8 @@ if __name__ == "__main__":
     print('Параметр установленный на min_sample_leaf：%d'%min_sample_leaf)
 
     dot2 = Digraph(format='png')
-    train2 = pd.read_csv("data/train2.csv")
-    test2 = pd.read_csv("data/test2.csv")
+    train2 = pd.read_csv("../data/train2.csv")
+    test2 = pd.read_csv("../data/test2.csv")
     train2 = train2.drop(['Unnamed: 0'], axis=1)
     test2 = test2.drop(['Unnamed: 0'], axis=1)
     text_train2 = train2.select_dtypes(include='object').columns
@@ -345,8 +287,8 @@ if __name__ == "__main__":
     print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
 
     dot3 = Digraph(format='png')
-    train3 = pd.read_csv("data/train3.csv")
-    test3 = pd.read_csv("data/test3.csv")
+    train3 = pd.read_csv("../data/train3.csv")
+    test3 = pd.read_csv("../data/test3.csv")
     train3 = train3.drop(['Unnamed: 0'], axis=1)
     test3 = test3.drop(['Unnamed: 0'], axis=1)
     text_train3 = train3.select_dtypes(include='object').columns
@@ -381,10 +323,6 @@ if __name__ == "__main__":
     print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
     print('Точность классификации：%f' % score)
     print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
-    app = QApplication(sys.argv)
-    ex = Example()
-    sys.exit(app.exec_())
-
 
 
 
