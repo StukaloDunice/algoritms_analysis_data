@@ -42,7 +42,7 @@ def hit_rate(forest, test):
     # Получить данные атрибутов, не являющихся метками, в тестовом наборе
     # Получить результаты классификации образцов один за другим
     # Сравните данные атрибута метки, чтобы определить, является ли классификация точной
-    y = test.pop(test.columns[test.shape[1]-1])
+    y = test.iloc[:,test.shape[1]-1]
     length = y.size
     y_p = pd.Series([test.shape[1]-1]*length,index=y.index)
     n_trees = len(forest)

@@ -19,7 +19,7 @@ class node:
     def __init__(self,data_index,
                  left=None,right=None,
                  feature=None,split=None,
-                 out = None,Gini=None
+                 out = None,Gini=0
                  ):
         self.data_index = data_index# коллекция Индекс строки коллекции, попадающей на узел
         self.left = left# int индекс левого поддерева
