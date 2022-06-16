@@ -119,6 +119,14 @@ def entropy_min(leaf, min_sample_leaf):
             IG = []
             s = data.iloc[:, [data.shape[1] - 1, feature]]
             s = s.sort_values(s.columns[1])
+            unic = s.iloc[:, 1]
+            for unicValue in unic:
+                vsp = []
+                for i in range(s.shape[0]):
+                    if unic.iloc[i] == unicValue:
+                        print(unicValue)
+
+            print(unic.unique())
             # цикл начинается с min_sample_leaf-1, в нашем случае min_sample_leaf = 31 => с 30 до (количество строк в датасете - min_sample_leaf)
             for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
                 if s.iloc[i,1] == s.iloc[i+1,1]:

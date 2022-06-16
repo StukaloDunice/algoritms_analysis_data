@@ -44,10 +44,9 @@ class Example(QWidget):
         self.hbox.addLayout(self.vbox2,30)
 
         self.combo = QComboBox()
-        self.combo.addItems(["20% обучающей выборки", "50% обучающей выборки",
-                        "80% обучающей выборки"])
-        self.vbox2.addWidget(self.combo)
+        self.combo.addItems(["20% обучающей выборки", "50% обучающей выборки", "80% обучающей выборки"])
         self.combo.activated[str].connect(self.onActivated)
+        self.vbox2.addWidget(self.combo)
 
         self.lbl1 = QLabel('Минимальное количество объектов в узле:')
         self.vbox2.addWidget(self.lbl1)
@@ -116,13 +115,13 @@ class Example(QWidget):
             self.test[col] = le.fit_transform(self.test[col])
 
     def onActivated(self, text):
-        if text == "20% выборки":
+        if text == "20% обучающей выборки":
             self.train = pd.read_csv("data/train3.csv")
             self.test = pd.read_csv("data/test3.csv")
-        if text == "50% выборки":
+        elif text == "50% обучающей выборки":
             self.train = pd.read_csv("data/train2.csv")
             self.test = pd.read_csv("data/test2.csv")
-        if text == "80% выборки":
+        elif text == "80% обучающей выборки":
             self.train = pd.read_csv("data/train1.csv")
             self.test = pd.read_csv("data/test1.csv")
         self.preparingData()
@@ -167,7 +166,7 @@ class Example(QWidget):
 
     def visualizeTree(self):
         self.dot = Digraph(format='png')
-        self.dot.attr('node', shape='box')
+        self.dot.attr('node', shape='box',fontsize='12')
         if self.type_algorithm == 'CART':
             for i in range(len(self.tree)):
                 self.dot.node(str(i),
@@ -201,6 +200,7 @@ class Example(QWidget):
             self.dot.attr('node', shape='circle')
             for i in range(len(self.tree)):
                 self.dot.node(str(i),str(i))
+                self.dot.edge(str(-1), str(i))
         self.dot.render(directory='doctest-output')
 
         self.pixmap = QPixmap("./doctest-output/Digraph.gv.png")
