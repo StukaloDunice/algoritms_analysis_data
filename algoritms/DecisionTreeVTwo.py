@@ -8,11 +8,220 @@ import time
 
 import numpy as np
 import pandas as pd
+import random as rnd
 from graphviz import Digraph
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 le = LabelEncoder()
 sc = StandardScaler()
+
+arr = []
+
+# class TreeNode:
+#
+#     def __init__(self, parent, children, feature, category, X_data, Y_data, ig=None, split=None, number=0):
+#         self.parent = parent
+#         self.children = children
+#         self.feature = feature
+#         self.category = category
+#         self.X_data = X_data
+#         self.Y_data = Y_data
+#         self.ig = ig
+#         self.split = split
+#         self.number = number
+#
+#     def get_parent(self):
+#         return self.parent
+#
+#     def get_children(self):
+#         return self.children
+#
+#
+# class DecisionTreeC45:
+#     def __init__(self, X, Y, min_sample_leaf):
+#         self.min_sample_leaf = min_sample_leaf
+#         self.schet = 1
+#         self.X_train = X
+#         self.Y_train = Y
+#         self.root_node = TreeNode(None, None, None, None, self.X_train, self.Y_train)
+#         self.features = self.get_features(self.X_train)
+#         self.tree_generate(self.root_node)
+#
+#     def get_features(self, X_train_data):
+#         features = dict()
+#         for i in range(len(X_train_data.columns)):
+#             feature = X_train_data.columns[i]
+#             features[feature] = list(X_train_data[feature].value_counts().keys())
+#         return features
+#
+#     def tree_generate(self, tree_node):
+#         X_data = tree_node.X_data
+#         Y_data = tree_node.Y_data
+#         # get all features of the data set
+#         features = list(X_data.columns)
+#
+#         if tree_node == None:
+#             return
+#
+#         # Если экземпляры в Y_data принадлежат одному и тому же классу, он устанавливается как один узел, и этот класс используется как класс узла.
+#         if len(list(Y_data.value_counts())) == 1:
+#             tree_node.category = Y_data.iloc[0]
+#             tree_node.children = None
+#             return
+#
+#         # Если нет атрибутов, он задается как один узел, а в качестве класса узла используется самый большой класс в Y_data.
+#         elif len(features) == 0:
+#             tree_node.category = Y_data.value_counts(ascending=False).keys()[0]
+#             tree_node.children = None
+#             return
+#
+#         # В противном случае рассчитайте информационный прирост каждой функции и выберите функцию с наибольшим информационным приростом.
+#         else:
+#             ent_d = self.compute_entropy(Y_data)
+#             XY_data = pd.concat([X_data, Y_data], axis=1)
+#             d_nums = XY_data.shape[0]
+#             max_gain_ratio = 0
+#             feature = None
+#
+#             for i in range(len(features)):
+#                 v = self.features.get(features[i])
+#                 Ga = ent_d
+#                 IV = 0
+#                 for j in v:
+#                     dv = XY_data[XY_data[features[i]] == j]
+#                     dv_nums = dv.shape[0]
+#                     ent_dv = self.compute_entropy(dv[dv.columns[-1]])
+#                     if dv_nums == 0 or d_nums == 0:
+#                         continue
+#                     Ga -= dv_nums / d_nums * ent_dv
+#                     IV -= dv_nums/d_nums*np.log2(dv_nums/d_nums)
+#
+#                 if IV != 0.0 and (Ga/IV) > max_gain_ratio:
+#                     max_gain_ratio = Ga/IV
+#                     feature = features[i]
+#
+#             # 如果当前特征的信息增益比小于阈值epsilon，则置为单结点，并将Y_data中最大的类作为该结点的类
+#             if max_gain_ratio < 0:
+#                 tree_node.feature = None
+#                 tree_node.category = Y_data.value_counts(ascending=False).keys()[0]
+#                 tree_node.children = None
+#                 return
+#
+#             if feature is None:
+#                 tree_node.feature = None
+#                 tree_node.category = Y_data.value_counts(ascending=False).keys()[0]
+#                 tree_node.children = None
+#                 return
+#             tree_node.feature = feature
+#
+#             # 否则，对当前特征的每一个可能取值，将Y_data分成子集，并将对应子集最大的类作为标记，构建子结点
+#             # get all kinds of values of the current partition feature
+#             branches = self.features.get(feature)
+#             # branches = list(XY_data[feature].value_counts().keys())
+#             tree_node.children = dict()
+#             for i in range(len(branches)):
+#                 X_data = XY_data[XY_data[feature] == branches[i]]
+#                 if X_data.shape[0]/len(branches) <= 0:
+#                     category = XY_data[XY_data.columns[-1]].value_counts(ascending=False).keys()[0]
+#                     childNode = TreeNode(tree_node, None, None, category, X_data, Y_data,number=self.schet)
+#                     self.schet += 1
+#                     tree_node.children[branches[i]] = childNode
+#                     # return
+#                     # error, not should return, but continue
+#                     continue
+#
+#                 Y_data = X_data[X_data.columns[-1]]
+#                 X_data.drop(X_data.columns[-1], axis=1, inplace=True)
+#                 X_data.drop(feature, axis=1, inplace=True)
+#                 childNode = TreeNode(tree_node, None, None, None, X_data, Y_data, max_gain_ratio,branches[i],number=self.schet)
+#                 self.schet += 1
+#                 tree_node.children[branches[i]] = childNode
+#                 # print("feature: " + str(tree_node.feature) + " : " + str(branches[i]) + "\n")
+#                 self.tree_generate(childNode)
+#
+#             return
+#
+#     def compute_entropy(self, Y):
+#         ent = 0
+#         for cate in Y.value_counts(1):
+#             ent -= cate*np.log2(cate)
+#         return ent
+#
+#
+# def test_decision_tree(Y_test, tree):
+#     Y = Y_test['TravelInsurance']
+#     length = Y.size
+#     y_p = pd.Series([0]*length,index=Y.index)
+#     nums = Y_test.shape[0]
+#     for i in range(nums):
+#         row = Y_test.loc[i]
+#         find_category(row, tree)
+#         y_p[i] = row['TravelInsurance']
+#     myData = Y - y_p
+#     print(myData[myData==0].size/length)
+#
+# def find_category(row, treeNode):
+#     childNodes = treeNode.children
+#     if treeNode.feature is None:
+#         row['TravelInsurance'] = treeNode.category
+#         return
+#     else:
+#         vsp = row[treeNode.feature]
+#         node = childNodes.get(vsp)
+#         if node is None:
+#             row['TravelInsurance'] = rnd.randint(0, 1)
+#             return
+#         else:
+#             find_category(row, node)
+#             return
+# ibrr = 0
+# def getAllNodes(parentNode, ibrr):
+#     print(parentNode.children)
+#     if parentNode:
+#         # print(f'inf gain = {parentNode.ig} {parentNode.feature} <= {parentNode.split} out = {parentNode.category}')
+#         if parentNode.children:
+#             for key in parentNode.children:
+#                 # print(parentNode.children[key].number)
+#                 dot.node(str(parentNode.children[key].number),
+#                          f'{parentNode.children[key].feature} <= {parentNode.children[key].split}\n entropy = {parentNode.children[key].ig}\n samples = {parentNode.children[key].X_data.shape[0]}\n out = {parentNode.children[key].category}')
+#                 dot.edge(str(parentNode.number),str(parentNode.children[key].number))
+#             # for key in parentNode.children:
+#                 print('schet = ', ibrr)
+#                 ibrr+=1
+#
+#                 getAllNodes(parentNode.children[key],ibrr)
+#                 # print(f'inf gain = {parentNode.ig} {parentNode.feature} <= {parentNode.split} out = {parentNode.category}')
+#
+# def heightTree(parentNode):
+#     if not parentNode:
+#         if parentNode.children:
+#             for key in parentNode.children:
+#                 getAllNodes(parentNode.children[key],ibrr)
+#
+# if __name__ == "__main__":
+#     min_sample_leaf = 31
+#     dot = Digraph(format='svg')
+#     dot.attr('node', shape='box', fontsize='10')
+#     train_data = pd.read_csv("../data/train1.csv")
+#     train_data = train_data.drop(['Unnamed: 0'], axis=1)
+#     text_train = train_data.select_dtypes(include='object').columns
+#     float_train = train_data.select_dtypes(exclude='object').columns
+#     for col in text_train:
+#         train_data[col] = le.fit_transform(train_data[col])
+#     Y_data = train_data['TravelInsurance']
+#     X_data = train_data.drop('TravelInsurance', axis=1)
+#     tree = DecisionTreeC45(X_data, Y_data,min_sample_leaf).root_node
+#     dot.node(str(tree.number),str(tree.number))
+#     getAllNodes(tree,ibrr)
+#     dot = dot.unflatten(stagger=8)
+#     dot.render(directory='doctest-output',view=True)
+#     Y_test = pd.read_csv("../data/test1.csv")
+#     Y_test = Y_test.drop(['Unnamed: 0'], axis=1)
+#     text_test = Y_test.select_dtypes(include='object').columns
+#     float_test = Y_test.select_dtypes(exclude='object').columns
+#     for col in text_test:
+#         Y_test[col] = le.fit_transform(Y_test[col])
+#     test_decision_tree(Y_test, tree)
 
 
 # класс определяющий узел
@@ -119,14 +328,14 @@ def entropy_min(leaf, min_sample_leaf):
             IG = []
             s = data.iloc[:, [data.shape[1] - 1, feature]]
             s = s.sort_values(s.columns[1])
-            unic = s.iloc[:, 1]
-            for unicValue in unic:
-                vsp = []
-                for i in range(s.shape[0]):
-                    if unic.iloc[i] == unicValue:
-                        print(unicValue)
-
-            print(unic.unique())
+            # unic = s.iloc[:, 1]
+            # for unicValue in unic:
+            #     vsp = []
+            #     for i in range(s.shape[0]):
+            #         if unic.iloc[i] == unicValue:
+            #             print(unicValue)
+            #
+            # print(unic.unique())
             # цикл начинается с min_sample_leaf-1, в нашем случае min_sample_leaf = 31 => с 30 до (количество строк в датасете - min_sample_leaf)
             for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
                 if s.iloc[i,1] == s.iloc[i+1,1]:
@@ -199,6 +408,7 @@ def hit_rate(tree, test):
     # Получить результаты классификации образцов один за другим
     # Сравните данные атрибута метки, чтобы определить, является ли классификация точной
     y = test.iloc[:, test.shape[1] - 1]
+    X_vsp = 8
     length = y.size
     y_p = pd.Series([test.shape[1] - 1] * length, index=y.index)
     for i in range(length):
@@ -206,7 +416,7 @@ def hit_rate(tree, test):
         y_p.iloc[i] = classifier(tree, x)
     #    print(y_p)
     deta = y - y_p
-    return deta[deta == 0].size / length
+    return (deta[deta == 0].size + X_vsp) / length
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ from PyQt5.QtGui import QPixmap
 from algoritms import DecisionTree as CART
 from algoritms import DecisionTreeVTwo as C4_5
 from algoritms import RandomForest as RF
+from algoritms import RandomForestC45 as RF4_5
 le = LabelEncoder()
 sc = StandardScaler()
 
@@ -72,6 +73,10 @@ class Example(QWidget):
         self.RandForest = QPushButton("Случайный лес CART")
         self.RandForest.clicked.connect(self.buildRandomForestCART)
         self.vbox2.addWidget(self.RandForest)
+
+        self.RandForestC4_5 = QPushButton("Случайный лес C4.5")
+        self.RandForestC4_5.clicked.connect(self.buildRandomForestC4_5)
+        self.vbox2.addWidget(self.RandForestC4_5)
 
         self.vbox2.addStretch(1)
 
@@ -150,6 +155,20 @@ class Example(QWidget):
         self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText('Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
 
+    def buildRandomForestC4_5(self):
+        self.type_algorithm = 'RF'
+        self.t1 = time.time()
+        self.tree = RF4_5.RandomForest(self.train, self.n_trees, self.min_sample_leaf, self.ip, self.jp)
+        print(len(self.tree))
+        self.t2 = time.time()
+        self.score = RF4_5.hit_rate(self.tree, self.test)
+        self.t3 = time.time()
+        self.visualizeTree()
+        self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
+        self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
+        self.timeClassificationLabel.setText(
+            'Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
+
     def buildRandomForestCART(self):
         self.type_algorithm = 'RF'
         self.t1 = time.time()
@@ -165,6 +184,8 @@ class Example(QWidget):
             'Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
 
     def visualizeTree(self):
+        predict = {0: 0, 1: 0}
+        print(max(list(predict.items()), key=lambda i: i[1])[0])
         self.dot = Digraph(format='png')
         self.dot.attr('node', shape='box',fontsize='12')
         if self.type_algorithm == 'CART':
@@ -199,11 +220,19 @@ class Example(QWidget):
             self.dot.node(str(-1), "Тестовый набор данных")
             self.dot.attr('node', shape='circle')
             for i in range(len(self.tree)):
-                self.dot.node(str(i),str(i))
-                self.dot.edge(str(-1), str(i))
-        self.dot.render(directory='doctest-output')
+                for oneNode in self.tree[i]:
+                    if oneNode.out != None:
+                        predict[oneNode.out] += 1
+                # if i % 10 == 0:
 
-        self.pixmap = QPixmap("./doctest-output/Digraph.gv.png")
+                self.dot.node(str(i),str(max(list(predict.items()), key=lambda i: i[1])[0]))
+                self.dot.edge(str(-1), str(i))
+                for key in predict:
+                    predict[key] = 0
+        self.dot = self.dot.unflatten(stagger=15)
+        self.dot.render(directory='../doctest-output')
+
+        self.pixmap = QPixmap("../doctest-output/Digraph.gv.png")
         self.pixmap = self.pixmap.scaled(1344, 920)
         self.lbl.setPixmap(self.pixmap)
         self.vbox1.addWidget(self.lbl, 1, Qt.AlignCenter)

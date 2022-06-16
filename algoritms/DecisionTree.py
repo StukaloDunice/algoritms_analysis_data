@@ -161,12 +161,6 @@ def gini(s):
     # 1-sum(pi^2)
     return 1-np.sum(np.square(p))
 
-
-def entropy(s):
-    p = np.array(s.value_counts(True))
-    entr = -(p[0] * np.log2(p[0]) + p[1] * np.log2(p[1]))
-    return entr
-
 def boolAttrOrNot(data,feature):
     # проходимся по каждому полю feature столбца выходим, если значение поля не равно 0 или 1
     for i in range(data.shape[0]):
@@ -242,7 +236,7 @@ if __name__ == "__main__":
             dot.edge(str(i), str(left))
         elif right != None:
             dot.edge(str(i),str(right))
-    dot.render(directory='doctest-output')
+    dot.render(directory='doctest-output',view=True)
     print('Время построения дерева решений равно：%f'%(t2-t1))
     print('Время классификации тестовой выборки равно：%f'%(t3-t2))
     print('Точность классификации：%f'%score)
