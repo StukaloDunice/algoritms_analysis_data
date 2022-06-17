@@ -4,6 +4,7 @@ Created on Mon Oct 22 19:02:26 2018
 
 @author: L-ear
 """
+import math
 import time
 
 import numpy as np
@@ -326,14 +327,20 @@ def entropy_min(leaf, min_sample_leaf):
             IG_right = []
             IG = []
             s = data.iloc[:, [data.shape[1] - 1, feature]]
-            lenhth = len(s.iloc[:,1].value_counts().keys())
-            unic_value_arr = list(s.iloc[:,1].value_counts().keys())
-            schet_unic_value_arr=[0 for i in range(lenhth)]
-            for unic_value in unic_value_arr:
-                for i in range(s.shape[0]):
-                    if s.iloc[i,1] == unic_value:
-                        schet_unic_value_arr[unic_value_arr.index(unic_value)] += 1
+            length = len(s.iloc[:,1].value_counts().keys())
+            s.iloc[:, 1].value_counts().keys()
+            myDict = list(s.iloc[:, 1].value_counts().keys())
+            unic_value_arr = {k: myDict[k] for k in range(len(myDict))}
+            schet_unic_value_arr={unic_value_arr[i]: 0 for i in range(length)}
+            for i in range(s.shape[0]):
+                if s.iloc[i,1]:
+                    schet_unic_value_arr[s.iloc[i,1]] += 1
             print(schet_unic_value_arr)
+            entr = 0
+            for key in schet_unic_value_arr:
+                p = schet_unic_value_arr[key]/s.shape[0]
+                entr -= p * math.log(p,2)
+            print(entr)
             # unic = s.iloc[:, 1]
             # for unicValue in unic:
             #     vsp = []
@@ -343,33 +350,33 @@ def entropy_min(leaf, min_sample_leaf):
             #
             # print(unic.unique())
             # цикл начинается с min_sample_leaf-1, в нашем случае min_sample_leaf = 31 => с 30 до (количество строк в датасете - min_sample_leaf)
-            for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
-                if s.iloc[i,1] == s.iloc[i+1,1]:
-                    continue
-                else:
-                    S1 = i + 1
-                    # S2 = число = количество полей от точки разделения до конца датасета
-                    S2 = S - S1
-                    # s1 и s2 - наборы данных до разделителя и после разделителя соответственно
-                    s1 = data.iloc[:(i + 1), data.shape[1] - 1]
-                    s2 = data.iloc[(i + 1):, data.shape[1] - 1]
-                    # IG.append(((S1/S) * entropy(s1), (S2/S) * entropy(s2),s.iloc[i,1]))
-                    entr_left = entropy(s1)
-                    entr_right = entropy(s2)
-                    IG_left.append(entr_left)
-                    IG_right.append(entr_right)
-                    IG.append((leaf.Entropy - ((S1/S)*entr_left + (S2/S) * entr_right), s.iloc[i,1]))
-            if IG:
-                # выбираем наименьший индекс джини
-                ig, split = max(IG, key=lambda x: x[0])
-                index = IG.index((ig, split))
-                # сохраняем индекс, столбец, значение разделителя
-                res.append((IG_left[index], IG_right[index], ig ,feature, split))
-    if res:
-        left, right, _, feature, split = max(res, key=lambda x: x[2])
-        return (left, right,_, data.columns[feature], split)
-    else:
-        return None
+    #         for i in np.arange(min_sample_leaf - 1, S - min_sample_leaf):
+    #             if s.iloc[i,1] == s.iloc[i+1,1]:
+    #                 continue
+    #             else:
+    #                 S1 = i + 1
+    #                 # S2 = число = количество полей от точки разделения до конца датасета
+    #                 S2 = S - S1
+    #                 # s1 и s2 - наборы данных до разделителя и после разделителя соответственно
+    #                 s1 = data.iloc[:(i + 1), data.shape[1] - 1]
+    #                 s2 = data.iloc[(i + 1):, data.shape[1] - 1]
+    #                 # IG.append(((S1/S) * entropy(s1), (S2/S) * entropy(s2),s.iloc[i,1]))
+    #                 entr_left = entropy(s1)
+    #                 entr_right = entropy(s2)
+    #                 IG_left.append(entr_left)
+    #                 IG_right.append(entr_right)
+    #                 IG.append((leaf.Entropy - ((S1/S)*entr_left + (S2/S) * entr_right), s.iloc[i,1]))
+    #         if IG:
+    #             # выбираем наименьший индекс джини
+    #             ig, split = max(IG, key=lambda x: x[0])
+    #             index = IG.index((ig, split))
+    #             # сохраняем индекс, столбец, значение разделителя
+    #             res.append((IG_left[index], IG_right[index], ig ,feature, split))
+    # if res:
+    #     left, right, _, feature, split = max(res, key=lambda x: x[2])
+    #     return (left, right,_, data.columns[feature], split)
+    # else:
+    #     return None
 
 def entropy(s):
     # возвращает вероятность каждого удикального значения в столбце, тоесть
