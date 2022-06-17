@@ -226,15 +226,13 @@ arr = []
 
 # класс определяющий узел
 class node:
-    def __init__(self, data,
-                 left=None, right=None,
+    def __init__(self, data,children=None,
                  feature=None, split=None,
                  out=None, Entropy=None,
                  ig =None
                  ):
         self.data = data  # коллекция Индекс строки коллекции, попадающей на узел
-        self.left = left  # int индекс левого поддерева
-        self.right = right  # int индекс правого поддерева
+        self.children = children
         self.feature = feature  # string функция разделения
         self.split = split  # int or float разделитель
         self.out = out  # Выходное значение конечного узла
@@ -323,11 +321,19 @@ def entropy_min(leaf, min_sample_leaf):
             IG_right.append(entr_right)
             res.append((entr_left, entr_right, leaf.Entropy - ((S1 / S) * entr_left + (S2 / S) * entr_right), feature, 0))
         else:
+            children = []
             IG_left = []
             IG_right = []
             IG = []
             s = data.iloc[:, [data.shape[1] - 1, feature]]
-            s = s.sort_values(s.columns[1])
+            lenhth = len(s.iloc[:,1].value_counts().keys())
+            unic_value_arr = list(s.iloc[:,1].value_counts().keys())
+            schet_unic_value_arr=[0 for i in range(lenhth)]
+            for unic_value in unic_value_arr:
+                for i in range(s.shape[0]):
+                    if s.iloc[i,1] == unic_value:
+                        schet_unic_value_arr[unic_value_arr.index(unic_value)] += 1
+            print(schet_unic_value_arr)
             # unic = s.iloc[:, 1]
             # for unicValue in unic:
             #     vsp = []
