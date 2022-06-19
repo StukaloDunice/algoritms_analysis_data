@@ -1,115 +1,19 @@
 digraph {
-	0 [label="EverTravelledAbroad <= 0
+	0 [label="AnnualIncome <= 1350000
  entropy = 0.9333930737612746
  samples = 398
  value = [1, 2] 
  out = None"]
-	1 [label="AnnualIncome <= 950000
- entropy = 0.8314743880097293
- samples = 323
- value = [3, 4] 
- out = None"]
-	2 [label="Age <= 29
- entropy = 0.8554508105601306
- samples = 75
- value = [5, 6] 
- out = None"]
-	3 [label="Age <= 27
- entropy = 0.7673297194656756
- samples = 192
- value = [7, 8] 
- out = None"]
-	4 [label="Age <= 29
- entropy = 0.9050443212876996
- samples = 131
- value = [9, 10] 
- out = None"]
-	5 [label="None <= None
- entropy = 0.7755126581331477
- samples = 35
- value = [None, None] 
- out = 1"]
-	6 [label="None <= None
- entropy = 0.9097361225311662
- samples = 40
- value = [None, None] 
- out = 1"]
-	7 [label="None <= None
- entropy = 0.869137580612638
- samples = 31
+	1 [label="None <= None
+ entropy = 0.835786011085532
+ samples = 342
  value = [None, None] 
  out = 0"]
-	8 [label="AnnualIncome <= 500000
- entropy = 0.7317553505442508
- samples = 161
- value = [11, 12] 
- out = None"]
-	9 [label="FamilyMembers <= 4
- entropy = 0.8314743880097293
- samples = 76
- value = [13, 14] 
- out = None"]
-	10 [label="None <= None
- entropy = 0.9805974409917271
- samples = 55
- value = [None, None] 
- out = 0"]
-	11 [label="None <= None
- entropy = 0.676941869780886
+	2 [label="None <= None
+ entropy = 0.5916727785823275
  samples = 56
  value = [None, None] 
- out = 0"]
-	12 [label="FamilyMembers <= 5
- entropy = 0.863120568566631
- samples = 105
- value = [15, 16] 
- out = None"]
-	13 [label="None <= None
- entropy = 0.8485481782946158
- samples = 40
- value = [None, None] 
- out = 0"]
-	14 [label="None <= None
- entropy = 0.9798687566511528
- samples = 36
- value = [None, None] 
- out = 0"]
-	15 [label="AnnualIncome <= 750000
- entropy = 0.7871265862012691
- samples = 68
- value = [17, 18] 
- out = None"]
-	16 [label="None <= None
- entropy = 0.9740248644357521
- samples = 37
- value = [None, None] 
- out = 0"]
-	17 [label="None <= None
- entropy = 0.6500224216483541
- samples = 36
- value = [None, None] 
- out = 0"]
-	18 [label="None <= None
- entropy = 0.9283620723948676
- samples = 32
- value = [None, None] 
- out = 0"]
+ out = 1"]
 	0 -> 1
 	0 -> 2
-	1 -> 3
-	1 -> 4
-	2 -> 5
-	2 -> 6
-	3 -> 7
-	3 -> 8
-	4 -> 9
-	4 -> 10
-	8 -> 11
-	8 -> 12
-	9 -> 13
-	9 -> 14
-	12 -> 15
-	12 -> 16
-	15 -> 17
-	15 -> 18
 }
