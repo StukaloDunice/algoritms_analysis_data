@@ -81,6 +81,8 @@ class Example(QWidget):
 
         self.vbox2.addStretch(1)
 
+        self.algoritm = QLabel('Алгоритм: ')
+        self.vbox2.addWidget(self.algoritm)
         self.scoreLabel = QLabel('Точность классификации модели: ')
         self.vbox2.addWidget(self.scoreLabel)
 
@@ -140,6 +142,7 @@ class Example(QWidget):
         self.score = C4_5.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
+        self.algoritm.setText('Алгоритм: Дерево решений C4.5')
         self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
         self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText('Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
@@ -152,6 +155,7 @@ class Example(QWidget):
         self.score = CART.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
+        self.algoritm.setText('Алгоритм: Дерево решений CART')
         self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
         self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText('Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
@@ -165,6 +169,7 @@ class Example(QWidget):
         self.score = RF4_5.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
+        self.algoritm.setText('Алгоритм: Случайный лес C4.5')
         self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
         self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText(
@@ -179,6 +184,7 @@ class Example(QWidget):
         self.score = RF.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
+        self.algoritm.setText('Алгоритм: Случайный лес CART')
         self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
         self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText(

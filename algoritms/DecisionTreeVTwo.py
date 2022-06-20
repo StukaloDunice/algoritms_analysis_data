@@ -208,6 +208,7 @@ def hit_rate(tree, test):
 
 
 if __name__ == "__main__":
+    min_sample_leaf = 31
     dot = Digraph(format='png')
     train = pd.read_csv("../data/train1.csv")
     test = pd.read_csv("../data/test1.csv")
@@ -224,7 +225,6 @@ if __name__ == "__main__":
     trees_scores = []
     for i in range(100):
         t1 = time.time()
-        min_sample_leaf = 31
         tree = build_tree(train, i + 1)
         t2 = time.time()
         score = hit_rate(tree, test)
@@ -266,7 +266,6 @@ if __name__ == "__main__":
     trees_scores = []
     for i in range(100):
         t1 = time.time()
-        min_sample_leaf = 31
         tree = build_tree(train2, i + 1)
         t2 = time.time()
         score = hit_rate(tree, test2)
@@ -292,47 +291,47 @@ if __name__ == "__main__":
     # print('Точность классификации：%f' % score)
     # print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
 
-    dot3 = Digraph(format='png')
-    train3 = pd.read_csv("../data/train3.csv")
-    test3 = pd.read_csv("../data/test3.csv")
-    train3 = train3.drop(['Unnamed: 0'], axis=1)
-    test3 = test3.drop(['Unnamed: 0'], axis=1)
-    text_train3 = train3.select_dtypes(include='object').columns
-    float1_train3 = train3.select_dtypes(exclude='object').columns
-    text_test3 = test3.select_dtypes(include='object').columns
-    float1_test3 = test3.select_dtypes(exclude='object').columns
-    for col in text_train3:
-        train3[col] = le.fit_transform(train3[col])
-    for col in text_test3:
-        test3[col] = le.fit_transform(test3[col])
-    trees_scores = []
-    for i in range(100):
-        t1 = time.time()
-        min_sample_leaf = 31
-        tree = build_tree(train2, i + 1)
-        t2 = time.time()
-        score = hit_rate(tree, test2)
-        t3 = time.time()
-        trees_scores.append((score, i + 1, t2 - t1, t3 - t2))
-    print(trees_scores)
-    # for i in range(len(tree)):
-    #     dot3.node(str(i),
-    #               f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
-    # for i in range(len(tree)):
-    #     left = tree[i].get_left()
-    #     right = tree[i].get_right()
-    #     if left != None and right != None:
-    #         for j in range(left, right + 1):
-    #             dot3.edge(str(i), str(j))
-    #     elif left != None:
-    #         dot3.edge(str(i), str(left))
-    #     elif right != None:
-    #         dot3.edge(str(i), str(right))
-    # dot3.render(directory='doctest-output')
-    # print('Время построения дерева решений равно：%f' % (t2 - t1))
-    # print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
-    # print('Точность классификации：%f' % score)
-    # print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    # dot3 = Digraph(format='png')
+    # train3 = pd.read_csv("../data/train3.csv")
+    # test3 = pd.read_csv("../data/test3.csv")
+    # train3 = train3.drop(['Unnamed: 0'], axis=1)
+    # test3 = test3.drop(['Unnamed: 0'], axis=1)
+    # text_train3 = train3.select_dtypes(include='object').columns
+    # float1_train3 = train3.select_dtypes(exclude='object').columns
+    # text_test3 = test3.select_dtypes(include='object').columns
+    # float1_test3 = test3.select_dtypes(exclude='object').columns
+    # for col in text_train3:
+    #     train3[col] = le.fit_transform(train3[col])
+    # for col in text_test3:
+    #     test3[col] = le.fit_transform(test3[col])
+    # trees_scores = []
+    # for i in range(100):
+    #     t1 = time.time()
+    #     min_sample_leaf = 31
+    #     tree = build_tree(train3, i + 1)
+    #     t2 = time.time()
+    #     score = hit_rate(tree, test3)
+    #     t3 = time.time()
+    #     trees_scores.append((score, i + 1, t2 - t1, t3 - t2))
+    # print(trees_scores)
+    # # for i in range(len(tree)):
+    # #     dot3.node(str(i),
+    # #               f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
+    # # for i in range(len(tree)):
+    # #     left = tree[i].get_left()
+    # #     right = tree[i].get_right()
+    # #     if left != None and right != None:
+    # #         for j in range(left, right + 1):
+    # #             dot3.edge(str(i), str(j))
+    # #     elif left != None:
+    # #         dot3.edge(str(i), str(left))
+    # #     elif right != None:
+    # #         dot3.edge(str(i), str(right))
+    # # dot3.render(directory='doctest-output')
+    # # print('Время построения дерева решений равно：%f' % (t2 - t1))
+    # # print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
+    # # print('Точность классификации：%f' % score)
+    # # print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
 
 
 
