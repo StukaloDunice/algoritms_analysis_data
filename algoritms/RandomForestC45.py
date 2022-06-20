@@ -43,7 +43,6 @@ def hit_rate(forest, test):
     # Получить результаты классификации образцов один за другим
     # Сравните данные атрибута метки, чтобы определить, является ли классификация точной
     y = test.iloc[:, test.shape[1] - 1]
-    X_vsp = 27
     length = y.size
     y_p = pd.Series([test.shape[1] - 1] * length, index=y.index)
     n_trees = len(forest)
@@ -54,7 +53,7 @@ def hit_rate(forest, test):
             res[t] = DT.classifier(forest[t], x)
         y_p.iloc[i] = max(res, key=res.count)
     deta = y - y_p
-    return (deta[deta == 0].size + X_vsp) / length
+    return deta[deta == 0].size / length
 
 
 if __name__ == "__main__":

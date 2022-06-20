@@ -15,8 +15,6 @@ from algoritms import RandomForestC45 as RF4_5
 le = LabelEncoder()
 sc = StandardScaler()
 
-print(0.9256859869821299 - (200/440 * 0.8337015252355331 + 240/440 * 0.5827617141151549))
-# 110/200 * math.log(110/200,2) + 90/200 * math.log(90/200)
 class Example(QWidget):
 
     def __init__(self):

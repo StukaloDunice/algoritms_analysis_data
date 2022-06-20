@@ -216,31 +216,34 @@ if __name__ == "__main__":
         train[col] = le.fit_transform(train[col])
     for col in text_test:
         test[col] = le.fit_transform(test[col])
-
-    t1 = time.time()
-    min_sample_leaf = 31
-    tree = build_tree(train ,min_sample_leaf)
-    t2 = time.time()
-    score = hit_rate(tree, test)
-    t3 = time.time()
-    for i in range(len(tree)):
-        dot.node(str(i),
-                 f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
-    for i in range(len(tree)):
-        left = tree[i].get_left()
-        right = tree[i].get_right()
-        if left != None and right != None:
-            for j in range(left, right + 1):
-                dot.edge(str(i),str(j))
-        elif left != None:
-            dot.edge(str(i), str(left))
-        elif right != None:
-            dot.edge(str(i),str(right))
-    dot.render(directory='doctest-output',view=True)
-    print('Время построения дерева решений равно：%f'%(t2-t1))
-    print('Время классификации тестовой выборки равно：%f'%(t3-t2))
-    print('Точность классификации：%f'%score)
-    print('Параметр установленный на min_sample_leaf：%d'%min_sample_leaf)
+    trees_scores = []
+    for i in range(100):
+        t1 = time.time()
+        min_sample_leaf = 31
+        tree = build_tree(train ,i+1)
+        t2 = time.time()
+        score = hit_rate(tree, test)
+        t3 = time.time()
+        trees_scores.append((score, i+1, t2 - t1, t3 - t2))
+    print(trees_scores)
+    # for i in range(len(tree)):
+    #     dot.node(str(i),
+    #              f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
+    # for i in range(len(tree)):
+    #     left = tree[i].get_left()
+    #     right = tree[i].get_right()
+    #     if left != None and right != None:
+    #         for j in range(left, right + 1):
+    #             dot.edge(str(i),str(j))
+    #     elif left != None:
+    #         dot.edge(str(i), str(left))
+    #     elif right != None:
+    #         dot.edge(str(i),str(right))
+    # dot.render(directory='doctest-output',view=True)
+    # print('Время построения дерева решений равно：%f'%(t2-t1))
+    # print('Время классификации тестовой выборки равно：%f'%(t3-t2))
+    # print('Точность классификации：%f'%score)
+    # print('Параметр установленный на min_sample_leaf：%d'%min_sample_leaf)
 
     dot2 = Digraph(format='png')
     train2 = pd.read_csv("../data/train2.csv")
@@ -255,30 +258,34 @@ if __name__ == "__main__":
         train2[col] = le.fit_transform(train2[col])
     for col in text_test2:
         test2[col] = le.fit_transform(test2[col])
-    t1 = time.time()
-    min_sample_leaf = 31
-    tree = build_tree(train2, min_sample_leaf)
-    t2 = time.time()
-    score = hit_rate(tree, test2)
-    t3 = time.time()
-    for i in range(len(tree)):
-        dot2.node(str(i),
-                 f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
-    for i in range(len(tree)):
-        left = tree[i].get_left()
-        right = tree[i].get_right()
-        if left != None and right != None:
-            for j in range(left, right + 1):
-                dot2.edge(str(i), str(j))
-        elif left != None:
-            dot2.edge(str(i), str(left))
-        elif right != None:
-            dot2.edge(str(i), str(right))
-    dot2.render(directory='doctest-output')
-    print('Время построения дерева решений равно：%f' % (t2 - t1))
-    print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
-    print('Точность классификации：%f' % score)
-    print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    trees_scores = []
+    for i in range(100):
+        t1 = time.time()
+        min_sample_leaf = 31
+        tree = build_tree(train2, i+1)
+        t2 = time.time()
+        score = hit_rate(tree, test2)
+        t3 = time.time()
+        trees_scores.append((score, i+1, t2 -t1, t3-t2))
+    print(trees_scores)
+    # for i in range(len(tree)):
+    #     dot2.node(str(i),
+    #              f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
+    # for i in range(len(tree)):
+    #     left = tree[i].get_left()
+    #     right = tree[i].get_right()
+    #     if left != None and right != None:
+    #         for j in range(left, right + 1):
+    #             dot2.edge(str(i), str(j))
+    #     elif left != None:
+    #         dot2.edge(str(i), str(left))
+    #     elif right != None:
+    #         dot2.edge(str(i), str(right))
+    # dot2.render(directory='doctest-output')
+    # print('Время построения дерева решений равно：%f' % (t2 - t1))
+    # print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
+    # print('Точность классификации：%f' % score)
+    # print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
 
     dot3 = Digraph(format='png')
     train3 = pd.read_csv("../data/train3.csv")
@@ -293,30 +300,34 @@ if __name__ == "__main__":
         train3[col] = le.fit_transform(train3[col])
     for col in text_test3:
         test3[col] = le.fit_transform(test3[col])
-    t1 = time.time()
-    min_sample_leaf = 31
-    tree = build_tree(train3, min_sample_leaf)
-    t2 = time.time()
-    score = hit_rate(tree, test3)
-    t3 = time.time()
-    for i in range(len(tree)):
-        dot3.node(str(i),
-                  f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
-    for i in range(len(tree)):
-        left = tree[i].get_left()
-        right = tree[i].get_right()
-        if left != None and right != None:
-            for j in range(left, right + 1):
-                dot3.edge(str(i), str(j))
-        elif left != None:
-            dot3.edge(str(i), str(left))
-        elif right != None:
-            dot3.edge(str(i), str(right))
-    dot3.render(directory='doctest-output')
-    print('Время построения дерева решений равно：%f' % (t2 - t1))
-    print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
-    print('Точность классификации：%f' % score)
-    print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
+    trees_scores = []
+    for i in range(100):
+        t1 = time.time()
+        min_sample_leaf = 31
+        tree = build_tree(train2, i+1)
+        t2 = time.time()
+        score = hit_rate(tree, test2)
+        t3 = time.time()
+        trees_scores.append((score, i+1, t2 -t1, t3-t2))
+    print(trees_scores)
+    # for i in range(len(tree)):
+    #     dot3.node(str(i),
+    #               f'{tree[i].feature} <= {tree[i].split}\n gini = {tree[i].Gini}\n samples = {tree[i].data_index.size}\n value = {[tree[i].left, tree[i].right]} \n out = {tree[i].out}')
+    # for i in range(len(tree)):
+    #     left = tree[i].get_left()
+    #     right = tree[i].get_right()
+    #     if left != None and right != None:
+    #         for j in range(left, right + 1):
+    #             dot3.edge(str(i), str(j))
+    #     elif left != None:
+    #         dot3.edge(str(i), str(left))
+    #     elif right != None:
+    #         dot3.edge(str(i), str(right))
+    # dot3.render(directory='doctest-output')
+    # print('Время построения дерева решений равно：%f' % (t2 - t1))
+    # print('Время классификации тестовой выборки равно：%f' % (t3 - t2))
+    # print('Точность классификации：%f' % score)
+    # print('Параметр установленный на min_sample_leaf：%d' % min_sample_leaf)
 
 
 
