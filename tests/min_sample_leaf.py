@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from algoritms import DecisionTree as CART
+from algoritms import DecisionTreeCART as CART
 from algoritms import DecisionTreeVTwo as C4_5
 import time
 import matplotlib.pyplot as plt

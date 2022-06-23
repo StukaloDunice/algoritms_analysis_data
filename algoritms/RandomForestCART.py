@@ -1,4 +1,4 @@
-from algoritms import DecisionTree as DT
+from algoritms import DecisionTreeCART as DT
 import numpy as np
 import pandas as pd
 import time

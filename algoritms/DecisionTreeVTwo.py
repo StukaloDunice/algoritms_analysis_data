@@ -72,7 +72,7 @@ def build_tree(S, min_sample_leaf):
 def divide(leaf, min_sample_leaf):
     # Разделяем листовые узлы, чтобы определить, можно ли их разделить
     data = leaf.data.loc[:]  # получаем набор данных узла
-    res = entropy_min1(leaf, min_sample_leaf)
+    res = ig_ratio_min(leaf, min_sample_leaf)
     if not res:
         leaf.out = data.iloc[:, data.shape[1] - 1].mode()[0]  # Режим как результат предсказания, тоесть значение, которое появляется чаще всего. Это может быть несколько значений.
         return None
@@ -84,7 +84,7 @@ def divide(leaf, min_sample_leaf):
     right = node(data=data[data[feature] > split])
     return left, right
 
-def entropy_min1(leaf, min_sample_leaf):
+def ig_ratio_min(leaf, min_sample_leaf):
     data_leaf = leaf.data
     number_row_data_leaf = data_leaf.shape[0]
     number_col_data_leaf = data_leaf.shape[1]
@@ -100,7 +100,7 @@ def entropy_min1(leaf, min_sample_leaf):
             S1 = s1.shape[0]
             S2= number_row_data_leaf - S1
             if S1 <= min_sample_leaf or S2 <= min_sample_leaf:
-                return None
+                continue
             p_null =S1/number_row_data_leaf
             p_one = S2/number_row_data_leaf
             ig_ratio = ig / -(p_null*np.log2(p_null) + p_one*np.log2(p_one) )
@@ -148,13 +148,13 @@ def entropy_node(data):
     p_one = number_one_in_col / number_row_input_data
     return -(p_null * np.log2(p_null) + p_one * np.log2(p_one))
 
-def entropy_split(target_and_attribute):
-    size_input_data = target_and_attribute.shape[0]
-    null_in_col_attribute = target_and_attribute.iloc[:, 0] == 0
-    null_in_col_attribute = target_and_attribute.loc[null_in_col_attribute]
+def entropy_split(two_cols):
+    size_input_data = two_cols.shape[0]
+    null_in_col_attribute = two_cols.iloc[:, 0] == 0
+    null_in_col_attribute = two_cols.loc[null_in_col_attribute]
     number_null_attribute = null_in_col_attribute.shape[0]
-    one_in_col_attribute = target_and_attribute.iloc[:, 0] == 1
-    one_in_col_attribute = target_and_attribute.loc[one_in_col_attribute]
+    one_in_col_attribute = two_cols.iloc[:, 0] == 1
+    one_in_col_attribute = two_cols.loc[one_in_col_attribute]
     number_one_attribute = one_in_col_attribute.shape[0]
     p_null_attribute = number_null_attribute/size_input_data
     p_one_attribute = number_one_attribute/size_input_data

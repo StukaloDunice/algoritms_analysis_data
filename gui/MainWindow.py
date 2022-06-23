@@ -2,20 +2,21 @@ import math
 import time
 
 import pandas as pd
-from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt, QSize, QRectF
 from graphviz import Digraph
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QLabel, QVBoxLayout, QComboBox, QPushButton, QLineEdit, QSizePolicy,
-                             QSpacerItem)
-from PyQt5.QtGui import QPixmap
-from algoritms import DecisionTree as CART
+                             QSpacerItem, QGraphicsScene, QGraphicsView)
+from PyQt5.QtGui import QPixmap, QImage, QPalette, QBrush
+from algoritms import DecisionTreeCART as CART
 from algoritms import DecisionTreeVTwo as C4_5
-from algoritms import RandomForest as RF
+from algoritms import RandomForestCART as RF
 from algoritms import RandomForestC45 as RF4_5
 le = LabelEncoder()
 sc = StandardScaler()
 
-class Example(QWidget):
+class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -33,9 +34,9 @@ class Example(QWidget):
 
     def initUI(self):
 
-        self.lbl = QLabel()
-
-        self.setGeometry(300,300, 1920, 1080)
+        self.scene = QGraphicsScene()
+        self.view = QGraphicsView(self.scene, self)
+        self.setGeometry(0,0, 1080, 720)
         # верхняя горизонтальная часть
         self.vbox1 = QVBoxLayout()
         # нижняя горизонтальная часть
@@ -80,16 +81,19 @@ class Example(QWidget):
         self.vbox2.addWidget(self.RandForestC4_5)
 
         self.vbox2.addStretch(1)
-
         self.algoritm = QLabel('Алгоритм: ')
+        self.algoritm.setFont(QtGui.QFont("Times", 12, QtGui.QFont.Bold))
         self.vbox2.addWidget(self.algoritm)
         self.scoreLabel = QLabel('Точность классификации модели: ')
+        self.scoreLabel.setFont(QtGui.QFont("Times", 11, QtGui.QFont.Bold))
         self.vbox2.addWidget(self.scoreLabel)
 
         self.timeCreateLabel = QLabel('Время построения модели: ')
+        self.timeCreateLabel.setFont(QtGui.QFont("Times", 11, QtGui.QFont.Bold))
         self.vbox2.addWidget(self.timeCreateLabel)
 
         self.timeClassificationLabel = QLabel('Время классификации тестовой выборки: ')
+        self.timeClassificationLabel.setFont(QtGui.QFont("Times", 11, QtGui.QFont.Bold))
         self.vbox2.addWidget(self.timeClassificationLabel)
 
         self.vbox2.addStretch(5)
@@ -143,9 +147,9 @@ class Example(QWidget):
         self.t3 = time.time()
         self.visualizeTree()
         self.algoritm.setText('Алгоритм: Дерево решений C4.5')
-        self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
-        self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
-        self.timeClassificationLabel.setText('Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
+        self.scoreLabel.setText('Точность классификации модели:\n' + str(self.score))
+        self.timeCreateLabel.setText('Время построения модели:\n' + str(self.t2 - self.t1) + ' секунд')
+        self.timeClassificationLabel.setText('Время классификации тестовой выборки:\n' + str(self.t3 - self.t2) + ' секунд')
 
     def buildDecTreeCART(self):
         self.type_algorithm = 'CART'
@@ -156,45 +160,42 @@ class Example(QWidget):
         self.t3 = time.time()
         self.visualizeTree()
         self.algoritm.setText('Алгоритм: Дерево решений CART')
-        self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
-        self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
-        self.timeClassificationLabel.setText('Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
+        self.scoreLabel.setText('Точность классификации модели:\n' + str(self.score))
+        self.timeCreateLabel.setText('Время построения модели:\n' + str(self.t2 - self.t1) + ' секунд')
+        self.timeClassificationLabel.setText('Время классификации тестовой выборки:\n' + str(self.t3 - self.t2) + ' секунд')
 
     def buildRandomForestC4_5(self):
         self.type_algorithm = 'RF'
         self.t1 = time.time()
         self.tree = RF4_5.RandomForest(self.train, self.n_trees, self.min_sample_leaf, self.ip, self.jp)
-        print(len(self.tree))
         self.t2 = time.time()
         self.score = RF4_5.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
         self.algoritm.setText('Алгоритм: Случайный лес C4.5')
-        self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
-        self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
+        self.scoreLabel.setText('Точность классификации модели:\n' + str(self.score))
+        self.timeCreateLabel.setText('Время построения модели:\n' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText(
-            'Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
+            'Время классификации тестовой выборки:\n' + str(self.t3 - self.t2) + ' секунд')
 
     def buildRandomForestCART(self):
         self.type_algorithm = 'RF'
         self.t1 = time.time()
         self.tree = RF.RandomForest(self.train, self.n_trees,self.min_sample_leaf,self.ip, self.jp)
-        print(len(self.tree))
         self.t2 = time.time()
         self.score = RF.hit_rate(self.tree, self.test)
         self.t3 = time.time()
         self.visualizeTree()
         self.algoritm.setText('Алгоритм: Случайный лес CART')
-        self.scoreLabel.setText('Точность классификации модели: ' + str(self.score))
-        self.timeCreateLabel.setText('Время построения модели: ' + str(self.t2 - self.t1) + ' секунд')
+        self.scoreLabel.setText('Точность классификации модели:\n' + str(self.score))
+        self.timeCreateLabel.setText('Время построения модели:\n' + str(self.t2 - self.t1) + ' секунд')
         self.timeClassificationLabel.setText(
-            'Время классификации тестовой выборки: ' + str(self.t3 - self.t2) + ' секунд')
+            'Время классификации тестовой выборки:\n' + str(self.t3 - self.t2) + ' секунд')
 
     def visualizeTree(self):
         predict = {0: 0, 1: 0}
-        print(max(list(predict.items()), key=lambda i: i[1])[0])
         self.dot = Digraph(format='png')
-        self.dot.attr('node', shape='box',fontsize='12')
+        self.dot.attr('node', shape='box',fontsize='14')
         if self.type_algorithm == 'CART':
             for i in range(len(self.tree)):
                 self.dot.node(str(i),
@@ -238,8 +239,10 @@ class Example(QWidget):
                     predict[key] = 0
         self.dot = self.dot.unflatten(stagger=15)
         self.dot.render(directory='../doctest-output')
-
+        self.scene.clear()
         self.pixmap = QPixmap("../doctest-output/Digraph.gv.png")
-        self.pixmap = self.pixmap.scaled(1344, 920)
-        self.lbl.setPixmap(self.pixmap)
-        self.vbox1.addWidget(self.lbl, 1, Qt.AlignCenter)
+        # self.pixmap = self.pixmap.scaled(1344, 920)
+        self.scene.addPixmap(self.pixmap)
+        self.view.setFixedSize(1344,920)
+        # self.view.fitInView(QRectF(0, 0, 1344, 920), Qt.KeepAspectRatio)
+        self.vbox1.addWidget(self.view, 1, Qt.AlignCenter)
