@@ -9,29 +9,22 @@ sc = StandardScaler()
 
 
 def RandomForest(train, n_trees, min_sample_leaf, ip, jp):
-    forest = []  # Сохраняем все деревья решений, полученные в результате обучения
-    # количество столбцов для обучения n-го дерева
+    forest = []
     fn = int(jp * (train.shape[1] - 1))
     for n in range(n_trees):
         t1 = time.time()
-        # выбирааем fn(5) рандомных столбцов
         sf = np.random.choice(
             np.arange(0, train.shape[1] - 1),
             fn,
             replace=False)
-        sf = np.append(train.shape[1] - 1, sf)  # Убедитесь, что метка находится в первом столбце
-        # разворачиваем список, чтобы целевая переменная стояла в первом столбце
+        sf = np.append(train.shape[1] - 1, sf)
         sf = np.flip(sf)
-        # берем все строки для тестовой выборки
         train_n = train.iloc[:, sf]
-        # берем часть выборки применив найденный коэффициент
         p = np.random.random_sample() * (1 - ip) + ip
         train_n = train_n.loc[
             np.random.choice(train_n.index,
                              int(p * train_n.index.size),
                              replace=False)]
-        # train_n — обучающая выборка случайно выбранного n-го дерева.
-        # обучаем дерево решений и сохраняем в массив "лес"
         forest.append(DT.build_tree(train_n, min_sample_leaf))
         t2 = time.time()
         # print('Время построения %d модели дерева = %f' % (n, t2 - t1))
@@ -39,14 +32,11 @@ def RandomForest(train, n_trees, min_sample_leaf, ip, jp):
 
 
 def hit_rate(forest, test):
-    # Получить данные атрибутов, не являющихся метками, в тестовом наборе
-    # Получить результаты классификации образцов один за другим
-    # Сравните данные атрибута метки, чтобы определить, является ли классификация точной
     y = test.iloc[:, test.shape[1] - 1]
     length = y.size
     y_p = pd.Series([test.shape[1] - 1] * length, index=y.index)
     n_trees = len(forest)
-    res = [0] * n_trees  # Сохранение результатов прогнозирования для каждого дерева
+    res = [0] * n_trees
     for i in range(length):
         x = test.iloc[i]
         for t in range(n_trees):
@@ -61,7 +51,6 @@ if __name__ == "__main__":
     jp = 0.7
     n_trees = 30
     min_sample_leaf = 5
-    # Вышеупомянутый параметр должен быть скорректирован
     train = pd.read_csv("../data/train1.csv")
     test = pd.read_csv("../data/test1.csv")
     train = train.drop(['Unnamed: 0'], axis=1)
